@@ -1,0 +1,3722 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Navigation graph specification data
+const int A = 99;     // A is a constant to encode the list of all nodes in SPA
+const int N = 18;     // number of nodes in the navigation graph
+const int M = 34;     // number of edges in the navigation graph
+//
+//----------
+const int SPA [M+1][16]={   // Shortest Path Array - lists of nodes which have shortest distance from given node through i-th edge
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{2,A,0,0,0,0,0,0,0,0,0,0,0,0,0,0},    // edge 1  from node n0
+{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},    // edge 2  from n2 
+{3,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0},    // edge 3  from n2
+{2,1,5,7,8,6,9,10,11,12,13,16,17,18,14,15},    // edge 4  from n3
+{4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},    // edge 5  from n3
+{3,A,0,0,0,0,0,0,0,0,0,0,0,0,0,0},    // edge 6  from n4
+{5,7,8,6,9,10,11,12,13,16,17,18,14,15,0,0},    // edge 7  from n2
+{2,1,3,4,0,0,0,0,0,0,0,0,0,0,0,0},   // edge 8  from n5
+{7,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0},   // edge 9  from n5
+{5,2,1,3,4,6,9,10,11,12,13,16,17,18,14,15},    // edge 10  from n7
+{8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},   // edge 11  from n7
+{7,A,0,0,0,0,0,0,0,0,0,0,0,0,0,0},    // edge 12  from n13
+{5,7,8,2,1,3,4,0,0,0,0,0,0,0,0,0},    // edge 13  from n6
+{6,9,10,11,12,13,14,15,16,17,18,0,0,0,0,0},    // edge 14  from n5
+{6,A,0,0,0,0,0,0,0,0,0,0,0,0,0,0},    // edge 15  from n9
+{9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},   // edge 16  from n6
+{6,9,5,2,1,3,4,7,8,0,0,0,0,0,0,0},    // edge 17  from n10
+{10,13,11,12,14,15,16,17,18,0,0,0,0,0,0,0},    // edge 18  from n6
+{11,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0},    // edge 19  from n10
+{10,13,14,15,16,17,18,6,9,5,7,8,2,1,3,4},   // edge 20  from n11
+{12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},   // edge 21  from n11
+{11,A,0,0,0,0,0,0,0,0,0,0,0,0,0,0},     // edge 22  from n12
+{10,11,12,6,9,5,7,8,2,1,3,4,0,0,0,0},    // edge 23  from n13
+{13,14,15,16,17,18,0,0,0,0,0,0,0,0,0,0},    // edge 24  from n10
+{13,14,15,10,11,12,6,9,5,7,8,2,1,3,4,0},   // edge 25  from n16
+{16,17,18,0,0,0,0,0,0,0,0,0,0,0,0,0},    // edge 26  from n13
+{16,A,0,0,0,0,0,0,0,0,0,0,0,0,0,0},    // edge 27  from n17
+{17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},    // edge 28  from n16
+{16,A,0,0,0,0,0,0,0,0,0,0,0,0,0,0},   // edge 29  from n18
+{18,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},   // edge 30  from n16
+{14,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},     // edge 31  from n13
+{13,10,11,12,16,17,18,6,9,5,7,8,2,1,3,4},     // edge 32  from n13
+{14,A,0,0,0,0,0,0,0,0,0,0,0,0,0,0},   // edge 33  from n15
+{15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}     // edge 34  from n14
+};
+
+const int EDGEs [N+1][4]={        // dimension is 4 since it is highest branching factor of the navigation graph
+{0,0,0,0},
+{1,0,0,0},  // outgoing edges from node n1
+{3,2,7,0},     // outgoing edges from node n2
+{4,5,0,0},     // outgoing edges from node n3
+{6,0,0,0},      // outgoing edges from node n4
+{8,14,9,0},      // outgoing edges from node n5
+{13,16,18,0},      // outgoing edges from node n6
+{10,11,0,0},      // outgoing edges from node n7
+{12,0,0,0},    // outgoing edges from node n8
+{15,0,0,0},    // outgoing edges from node n9
+{17,24,19,0},     // outgoing edges from node n10
+{21,20,0,0},     // outgoing edges from node n11
+{22,0,0,0},     // outgoing edges from node n12
+{26,23,31,0},     // outgoing edges from node n13
+{32,34,0,0},     // outgoing edges from node n14
+{33,0,0,0},     // outgoing edges from node n15
+{28,30,25,0},     // outgoing edges from node n16
+{27,0,0,0},     // outgoing edges from node n17
+{29,0,0,0}     // outgoing edges from node n18
+};
+
+const int BRANCHING [N+1]={0,1,3,2,1,3,3,2,1,1,3,2,1,3,2,1,3,1,1};    // brancing factor of outgoing edges by nodes
+//------ Robots' data--------------------------
+const int R = 4;              // number of robots
+typedef int [1,R] id_t;       // Type definition for robot ID-s
+int [0,N] Pos [R+1]={9,1,8,17,15};// Array of agents' locations: Pos[0]- position of the intruder, Pos[i] - position of i-th robot (needs initialization!)
+int [0,M+1] NextEdge [R+1];   // Array of edges by robots for next move
+int [1,N+1] NextNode [R+1];   // Array of destination nodes of the planned move
+int [0,R] Occ [N+1]= {0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,1,0}; //Occupancy of navigation graph nodes - shows how many robots are currently in each node (needs initialization!)
+bool Detected;                 // Shared variable for coordination, Detected == true when Intruder is detected in some robot's neighbour node
+bool Captured;                // Shared variable for coordination, Captured == true when Intruder is fully surrounded, Termination condition
+
+//-------- i/o variables for communication with simulator -----------
+int [0,N] i_robot_1_goto;
+int [0,N] i_robot_2_goto;
+int [0,N] i_robot_3_goto;
+int [0,N] i_robot_4_goto;
+//-------- input channels for the simulator ----------------
+chan i_robot_1;
+chan i_robot_2;
+chan i_robot_3;
+chan i_robot_4;
+//--------- output channels from the simulator--------------
+chan o_robot_1_response;
+chan o_robot_2_response;
+chan o_robot_3_response;
+chan o_robot_4_response;
+//--------- channels to synchronise the moves of individual robots between its planner and navigation visualiser --------------
+broadcast chan chR [R+1];
+broadcast chan  chI;
+broadcast chan chR1 [R+1];
+broadcast chan chR2 [R+1];</declaration>
+	<template>
+		<name x="5" y="5">Robot1_Pos</name>
+		<declaration>// Place local declarations here.
+const id_t id=1;
+
+</declaration>
+		<location id="id0" x="204" y="399">
+			<name x="221" y="382">n10</name>
+		</location>
+		<location id="id1" x="0" y="399">
+			<name x="-34" y="382">n9</name>
+		</location>
+		<location id="id2" x="204" y="42">
+			<name x="204" y="8">n3</name>
+		</location>
+		<location id="id3" x="0" y="212">
+			<name x="8" y="178">n8</name>
+		</location>
+		<location id="id4" x="0" y="-136">
+			<name x="17" y="-144">n4</name>
+		</location>
+		<location id="id5" x="-238" y="42">
+			<name x="-263" y="8">n2</name>
+		</location>
+		<location id="id6" x="204" y="-272">
+			<name x="194" y="-306">n6</name>
+		</location>
+		<location id="id7" x="0" y="-272">
+			<name x="-10" y="-306">n5</name>
+		</location>
+		<location id="id8" x="-238" y="-272">
+			<name x="-248" y="-306">n7</name>
+		</location>
+		<location id="id9" x="0" y="42">
+			<name x="-25" y="17">n1</name>
+		</location>
+		<init ref="id8"/>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id5"/>
+			<label kind="guard" x="-365" y="-127">NextNode[id]==2</label>
+			<label kind="synchronisation" x="-331" y="-144">chR[id]?</label>
+			<label kind="comments" x="-272" y="-144">8</label>
+			<nail x="-255" y="-127"/>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id8"/>
+			<label kind="guard" x="-229" y="-127">NextNode[id]==7</label>
+			<label kind="synchronisation" x="-204" y="-144">chR[id]?</label>
+			<label kind="comments" x="-221" y="-144">7</label>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id4"/>
+			<label kind="guard" x="25" y="-85">NextNode[id]==4</label>
+			<label kind="synchronisation" x="51" y="-102">chR[id]?</label>
+			<label kind="comments" x="25" y="-102">10</label>
+			<nail x="17" y="-68"/>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id0"/>
+			<label kind="guard" x="212" y="237">NextNode[id]==10</label>
+			<label kind="synchronisation" x="238" y="221">chR[id]?</label>
+			<label kind="comments" x="212" y="220">20</label>
+			<nail x="204" y="212"/>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="guard" x="68" y="433">NextNode[id]==9</label>
+			<label kind="synchronisation" x="68" y="416">chR[id]?</label>
+			<label kind="comments" x="42" y="416">22</label>
+			<nail x="102" y="416"/>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id9"/>
+			<label kind="guard" x="-136" y="127">NextNode[id]==1</label>
+			<label kind="synchronisation" x="-119" y="110">chR[id]?</label>
+			<label kind="comments" x="-51" y="110">15</label>
+			<nail x="-17" y="127"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id3"/>
+			<label kind="guard" x="-136" y="306">NextNode[id]==8</label>
+			<label kind="synchronisation" x="-127" y="289">chR[id]?</label>
+			<label kind="comments" x="-51" y="289">17</label>
+			<nail x="-17" y="306"/>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id9"/>
+			<label kind="guard" x="-204" y="-8">NextNode[id]==1</label>
+			<label kind="synchronisation" x="-161" y="8">chR[id]?</label>
+			<label kind="comments" x="-93" y="8">11</label>
+			<nail x="-119" y="25"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id9"/>
+			<label kind="guard" x="102" y="-8">NextNode[id]==1</label>
+			<label kind="synchronisation" x="102" y="8">chR[id]?</label>
+			<label kind="comments" x="68" y="8">13</label>
+			<nail x="102" y="25"/>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id3"/>
+			<label kind="guard" x="76" y="238">NextNode[id]==8</label>
+			<label kind="synchronisation" x="68" y="221">chR[id]?</label>
+			<label kind="comments" x="127" y="221">19</label>
+			<nail x="195" y="229"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id0"/>
+			<label kind="guard" x="68" y="374">NextNode[id]==10</label>
+			<label kind="synchronisation" x="68" y="357">chR[id]?</label>
+			<label kind="comments" x="42" y="374">21</label>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id5"/>
+			<label kind="guard" x="-204" y="59">NextNode[id]==2</label>
+			<label kind="synchronisation" x="-153" y="42">chR[id]?</label>
+			<label kind="comments" x="-93" y="51">12</label>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id2"/>
+			<label kind="guard" x="102" y="59">NextNode[id]==3</label>
+			<label kind="synchronisation" x="102" y="42">chR[id]?</label>
+			<label kind="comments" x="68" y="42">14</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id1"/>
+			<label kind="guard" x="8" y="306">NextNode[id]==9</label>
+			<label kind="synchronisation" x="34" y="289">chR[id]?</label>
+			<label kind="comments" x="8" y="289">18</label>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id3"/>
+			<label kind="guard" x="8" y="127">NextNode[id]==8</label>
+			<label kind="synchronisation" x="42" y="110">chR[id]?</label>
+			<label kind="comments" x="8" y="110">16</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id9"/>
+			<label kind="guard" x="-110" y="-85">NextNode[id]==1</label>
+			<label kind="synchronisation" x="-102" y="-102">chR[id]?</label>
+			<label kind="comments" x="-42" y="-102">9</label>
+		</transition>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id7"/>
+			<label kind="guard" x="-204" y="-340">NextNode[id]==5</label>
+			<label kind="synchronisation" x="-161" y="-323">chR[id]?</label>
+			<label kind="comments" x="-93" y="-323">1</label>
+			<nail x="-110" y="-306"/>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id7"/>
+			<label kind="guard" x="93" y="-340">NextNode[id]==5</label>
+			<label kind="synchronisation" x="93" y="-323">chR[id]?</label>
+			<label kind="comments" x="68" y="-323">3</label>
+			<nail x="102" y="-306"/>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id7"/>
+			<label kind="guard" x="17" y="-204">NextNode[id]==5</label>
+			<label kind="synchronisation" x="42" y="-221">chR[id]?</label>
+			<label kind="comments" x="25" y="-221">6</label>
+			<nail x="17" y="-204"/>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id4"/>
+			<label kind="guard" x="-127" y="-204">NextNode[id]==4</label>
+			<label kind="synchronisation" x="-85" y="-221">chR[id]?</label>
+			<label kind="comments" x="-34" y="-229">5</label>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id8"/>
+			<label kind="guard" x="-170" y="-272">NextNode[id]==7</label>
+			<label kind="synchronisation" x="-161" y="-289">chR[id]?</label>
+			<label kind="comments" x="-93" y="-297">2</label>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id6"/>
+			<label kind="guard" x="68" y="-272">NextNode[id]==6</label>
+			<label kind="synchronisation" x="102" y="-289">chR[id]?</label>
+			<label kind="comments" x="68" y="-289">4</label>
+		</transition>
+	</template>
+	<template>
+		<name x="5" y="5">Robot2_Pos</name>
+		<declaration>// Place local declarations here.
+const id_t id=2;
+
+</declaration>
+		<location id="id10" x="204" y="399">
+			<name x="221" y="382">n10</name>
+		</location>
+		<location id="id11" x="0" y="399">
+			<name x="-34" y="382">n9</name>
+		</location>
+		<location id="id12" x="204" y="42">
+			<name x="204" y="8">n3</name>
+		</location>
+		<location id="id13" x="0" y="212">
+			<name x="8" y="178">n8</name>
+		</location>
+		<location id="id14" x="0" y="-136">
+			<name x="17" y="-144">n4</name>
+		</location>
+		<location id="id15" x="-238" y="42">
+			<name x="-263" y="8">n2</name>
+		</location>
+		<location id="id16" x="204" y="-272">
+			<name x="194" y="-306">n6</name>
+		</location>
+		<location id="id17" x="0" y="-272">
+			<name x="-10" y="-306">n5</name>
+		</location>
+		<location id="id18" x="-238" y="-272">
+			<name x="-248" y="-306">n7</name>
+		</location>
+		<location id="id19" x="0" y="42">
+			<name x="-25" y="17">n1</name>
+		</location>
+		<init ref="id16"/>
+		<transition>
+			<source ref="id18"/>
+			<target ref="id15"/>
+			<label kind="guard" x="-365" y="-127">NextNode[id]==2</label>
+			<label kind="synchronisation" x="-331" y="-144">chR[id]?</label>
+			<label kind="comments" x="-272" y="-144">8</label>
+			<nail x="-255" y="-127"/>
+		</transition>
+		<transition>
+			<source ref="id15"/>
+			<target ref="id18"/>
+			<label kind="guard" x="-229" y="-127">NextNode[id]==7</label>
+			<label kind="synchronisation" x="-204" y="-144">chR[id]?</label>
+			<label kind="comments" x="-221" y="-144">7</label>
+		</transition>
+		<transition>
+			<source ref="id19"/>
+			<target ref="id14"/>
+			<label kind="guard" x="25" y="-85">NextNode[id]==4</label>
+			<label kind="synchronisation" x="51" y="-102">chR[id]?</label>
+			<label kind="comments" x="25" y="-102">10</label>
+			<nail x="17" y="-68"/>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id10"/>
+			<label kind="guard" x="212" y="237">NextNode[id]==10</label>
+			<label kind="synchronisation" x="238" y="221">chR[id]?</label>
+			<label kind="comments" x="212" y="220">20</label>
+			<nail x="204" y="212"/>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id11"/>
+			<label kind="guard" x="68" y="433">NextNode[id]==9</label>
+			<label kind="synchronisation" x="68" y="416">chR[id]?</label>
+			<label kind="comments" x="42" y="416">22</label>
+			<nail x="102" y="416"/>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id19"/>
+			<label kind="guard" x="-136" y="127">NextNode[id]==1</label>
+			<label kind="synchronisation" x="-119" y="110">chR[id]?</label>
+			<label kind="comments" x="-51" y="110">15</label>
+			<nail x="-17" y="127"/>
+		</transition>
+		<transition>
+			<source ref="id11"/>
+			<target ref="id13"/>
+			<label kind="guard" x="-136" y="306">NextNode[id]==8</label>
+			<label kind="synchronisation" x="-127" y="289">chR[id]?</label>
+			<label kind="comments" x="-51" y="289">17</label>
+			<nail x="-17" y="306"/>
+		</transition>
+		<transition>
+			<source ref="id15"/>
+			<target ref="id19"/>
+			<label kind="guard" x="-204" y="-8">NextNode[id]==1</label>
+			<label kind="synchronisation" x="-161" y="8">chR[id]?</label>
+			<label kind="comments" x="-93" y="8">11</label>
+			<nail x="-119" y="25"/>
+		</transition>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id19"/>
+			<label kind="guard" x="102" y="-8">NextNode[id]==1</label>
+			<label kind="synchronisation" x="102" y="8">chR[id]?</label>
+			<label kind="comments" x="68" y="8">13</label>
+			<nail x="102" y="25"/>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id13"/>
+			<label kind="guard" x="76" y="238">NextNode[id]==8</label>
+			<label kind="synchronisation" x="68" y="221">chR[id]?</label>
+			<label kind="comments" x="127" y="221">19</label>
+			<nail x="195" y="229"/>
+		</transition>
+		<transition>
+			<source ref="id11"/>
+			<target ref="id10"/>
+			<label kind="guard" x="68" y="374">NextNode[id]==10</label>
+			<label kind="synchronisation" x="68" y="357">chR[id]?</label>
+			<label kind="comments" x="42" y="374">21</label>
+		</transition>
+		<transition>
+			<source ref="id19"/>
+			<target ref="id15"/>
+			<label kind="guard" x="-204" y="59">NextNode[id]==2</label>
+			<label kind="synchronisation" x="-153" y="42">chR[id]?</label>
+			<label kind="comments" x="-93" y="51">12</label>
+		</transition>
+		<transition>
+			<source ref="id19"/>
+			<target ref="id12"/>
+			<label kind="guard" x="102" y="59">NextNode[id]==3</label>
+			<label kind="synchronisation" x="102" y="42">chR[id]?</label>
+			<label kind="comments" x="68" y="42">14</label>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id11"/>
+			<label kind="guard" x="8" y="306">NextNode[id]==9</label>
+			<label kind="synchronisation" x="34" y="289">chR[id]?</label>
+			<label kind="comments" x="8" y="289">18</label>
+		</transition>
+		<transition>
+			<source ref="id19"/>
+			<target ref="id13"/>
+			<label kind="guard" x="8" y="127">NextNode[id]==8</label>
+			<label kind="synchronisation" x="42" y="110">chR[id]?</label>
+			<label kind="comments" x="8" y="110">16</label>
+		</transition>
+		<transition>
+			<source ref="id14"/>
+			<target ref="id19"/>
+			<label kind="guard" x="-110" y="-85">NextNode[id]==1</label>
+			<label kind="synchronisation" x="-102" y="-102">chR[id]?</label>
+			<label kind="comments" x="-42" y="-102">9</label>
+		</transition>
+		<transition>
+			<source ref="id18"/>
+			<target ref="id17"/>
+			<label kind="guard" x="-204" y="-340">NextNode[id]==5</label>
+			<label kind="synchronisation" x="-161" y="-323">chR[id]?</label>
+			<label kind="comments" x="-93" y="-323">1</label>
+			<nail x="-110" y="-306"/>
+		</transition>
+		<transition>
+			<source ref="id16"/>
+			<target ref="id17"/>
+			<label kind="guard" x="93" y="-340">NextNode[id]==5</label>
+			<label kind="synchronisation" x="93" y="-323">chR[id]?</label>
+			<label kind="comments" x="68" y="-323">3</label>
+			<nail x="102" y="-306"/>
+		</transition>
+		<transition>
+			<source ref="id14"/>
+			<target ref="id17"/>
+			<label kind="guard" x="17" y="-204">NextNode[id]==5</label>
+			<label kind="synchronisation" x="42" y="-221">chR[id]?</label>
+			<label kind="comments" x="25" y="-221">6</label>
+			<nail x="17" y="-204"/>
+		</transition>
+		<transition>
+			<source ref="id17"/>
+			<target ref="id14"/>
+			<label kind="guard" x="-119" y="-204">NextNode[id]==4</label>
+			<label kind="synchronisation" x="-76" y="-221">chR[id]?</label>
+			<label kind="comments" x="-34" y="-221">5</label>
+		</transition>
+		<transition>
+			<source ref="id17"/>
+			<target ref="id18"/>
+			<label kind="guard" x="-170" y="-272">NextNode[id]==7</label>
+			<label kind="synchronisation" x="-161" y="-289">chR[id]?</label>
+			<label kind="comments" x="-93" y="-297">2</label>
+		</transition>
+		<transition>
+			<source ref="id17"/>
+			<target ref="id16"/>
+			<label kind="guard" x="68" y="-272">NextNode[id]==6</label>
+			<label kind="synchronisation" x="102" y="-289">chR[id]?</label>
+			<label kind="comments" x="68" y="-289">4</label>
+		</transition>
+	</template>
+	<template>
+		<name x="5" y="5">Robot3_Pos</name>
+		<declaration>// Place local declarations here.
+const id_t id=3;
+
+</declaration>
+		<location id="id20" x="204" y="399">
+			<name x="221" y="382">n10</name>
+		</location>
+		<location id="id21" x="0" y="399">
+			<name x="-34" y="382">n9</name>
+		</location>
+		<location id="id22" x="204" y="42">
+			<name x="204" y="8">n3</name>
+		</location>
+		<location id="id23" x="0" y="212">
+			<name x="8" y="178">n8</name>
+		</location>
+		<location id="id24" x="0" y="-136">
+			<name x="17" y="-144">n4</name>
+		</location>
+		<location id="id25" x="-238" y="42">
+			<name x="-263" y="8">n2</name>
+		</location>
+		<location id="id26" x="204" y="-272">
+			<name x="194" y="-306">n6</name>
+		</location>
+		<location id="id27" x="0" y="-272">
+			<name x="-10" y="-306">n5</name>
+		</location>
+		<location id="id28" x="-238" y="-272">
+			<name x="-248" y="-306">n7</name>
+		</location>
+		<location id="id29" x="0" y="42">
+			<name x="-25" y="17">n1</name>
+		</location>
+		<init ref="id21"/>
+		<transition>
+			<source ref="id28"/>
+			<target ref="id25"/>
+			<label kind="guard" x="-365" y="-127">NextNode[id]==2</label>
+			<label kind="synchronisation" x="-331" y="-144">chR[id]?</label>
+			<label kind="comments" x="-272" y="-144">8</label>
+			<nail x="-255" y="-127"/>
+		</transition>
+		<transition>
+			<source ref="id25"/>
+			<target ref="id28"/>
+			<label kind="guard" x="-229" y="-127">NextNode[id]==7</label>
+			<label kind="synchronisation" x="-204" y="-144">chR[id]?</label>
+			<label kind="comments" x="-221" y="-144">7</label>
+		</transition>
+		<transition>
+			<source ref="id29"/>
+			<target ref="id24"/>
+			<label kind="guard" x="25" y="-85">NextNode[id]==4</label>
+			<label kind="synchronisation" x="51" y="-102">chR[id]?</label>
+			<label kind="comments" x="25" y="-102">10</label>
+			<nail x="17" y="-68"/>
+		</transition>
+		<transition>
+			<source ref="id23"/>
+			<target ref="id20"/>
+			<label kind="guard" x="212" y="237">NextNode[id]==10</label>
+			<label kind="synchronisation" x="238" y="221">chR[id]?</label>
+			<label kind="comments" x="212" y="220">20</label>
+			<nail x="204" y="212"/>
+		</transition>
+		<transition>
+			<source ref="id20"/>
+			<target ref="id21"/>
+			<label kind="guard" x="68" y="433">NextNode[id]==9</label>
+			<label kind="synchronisation" x="68" y="416">chR[id]?</label>
+			<label kind="comments" x="42" y="416">22</label>
+			<nail x="102" y="416"/>
+		</transition>
+		<transition>
+			<source ref="id23"/>
+			<target ref="id29"/>
+			<label kind="guard" x="-136" y="127">NextNode[id]==1</label>
+			<label kind="synchronisation" x="-119" y="110">chR[id]?</label>
+			<label kind="comments" x="-51" y="110">15</label>
+			<nail x="-17" y="127"/>
+		</transition>
+		<transition>
+			<source ref="id21"/>
+			<target ref="id23"/>
+			<label kind="guard" x="-136" y="306">NextNode[id]==8</label>
+			<label kind="synchronisation" x="-127" y="289">chR[id]?</label>
+			<label kind="comments" x="-51" y="289">17</label>
+			<nail x="-17" y="306"/>
+		</transition>
+		<transition>
+			<source ref="id25"/>
+			<target ref="id29"/>
+			<label kind="guard" x="-204" y="-8">NextNode[id]==1</label>
+			<label kind="synchronisation" x="-161" y="8">chR[id]?</label>
+			<label kind="comments" x="-93" y="8">11</label>
+			<nail x="-119" y="25"/>
+		</transition>
+		<transition>
+			<source ref="id22"/>
+			<target ref="id29"/>
+			<label kind="guard" x="102" y="-8">NextNode[id]==1</label>
+			<label kind="synchronisation" x="102" y="8">chR[id]?</label>
+			<label kind="comments" x="68" y="8">13</label>
+			<nail x="102" y="25"/>
+		</transition>
+		<transition>
+			<source ref="id20"/>
+			<target ref="id23"/>
+			<label kind="guard" x="76" y="238">NextNode[id]==8</label>
+			<label kind="synchronisation" x="68" y="221">chR[id]?</label>
+			<label kind="comments" x="127" y="221">19</label>
+			<nail x="195" y="229"/>
+		</transition>
+		<transition>
+			<source ref="id21"/>
+			<target ref="id20"/>
+			<label kind="guard" x="68" y="374">NextNode[id]==10</label>
+			<label kind="synchronisation" x="68" y="357">chR[id]?</label>
+			<label kind="comments" x="42" y="374">21</label>
+		</transition>
+		<transition>
+			<source ref="id29"/>
+			<target ref="id25"/>
+			<label kind="guard" x="-204" y="59">NextNode[id]==2</label>
+			<label kind="synchronisation" x="-153" y="42">chR[id]?</label>
+			<label kind="comments" x="-93" y="51">12</label>
+		</transition>
+		<transition>
+			<source ref="id29"/>
+			<target ref="id22"/>
+			<label kind="guard" x="102" y="59">NextNode[id]==3</label>
+			<label kind="synchronisation" x="102" y="42">chR[id]?</label>
+			<label kind="comments" x="68" y="42">14</label>
+		</transition>
+		<transition>
+			<source ref="id23"/>
+			<target ref="id21"/>
+			<label kind="guard" x="8" y="306">NextNode[id]==9</label>
+			<label kind="synchronisation" x="34" y="289">chR[id]?</label>
+			<label kind="comments" x="8" y="289">18</label>
+		</transition>
+		<transition>
+			<source ref="id29"/>
+			<target ref="id23"/>
+			<label kind="guard" x="8" y="127">NextNode[id]==8</label>
+			<label kind="synchronisation" x="42" y="110">chR[id]?</label>
+			<label kind="comments" x="8" y="110">16</label>
+		</transition>
+		<transition>
+			<source ref="id24"/>
+			<target ref="id29"/>
+			<label kind="guard" x="-110" y="-85">NextNode[id]==1</label>
+			<label kind="synchronisation" x="-102" y="-102">chR[id]?</label>
+			<label kind="comments" x="-42" y="-102">9</label>
+		</transition>
+		<transition>
+			<source ref="id28"/>
+			<target ref="id27"/>
+			<label kind="guard" x="-204" y="-340">NextNode[id]==5</label>
+			<label kind="synchronisation" x="-161" y="-323">chR[id]?</label>
+			<label kind="comments" x="-93" y="-323">1</label>
+			<nail x="-110" y="-306"/>
+		</transition>
+		<transition>
+			<source ref="id26"/>
+			<target ref="id27"/>
+			<label kind="guard" x="93" y="-340">NextNode[id]==5</label>
+			<label kind="synchronisation" x="93" y="-323">chR[id]?</label>
+			<label kind="comments" x="68" y="-323">3</label>
+			<nail x="102" y="-306"/>
+		</transition>
+		<transition>
+			<source ref="id24"/>
+			<target ref="id27"/>
+			<label kind="guard" x="17" y="-204">NextNode[id]==5</label>
+			<label kind="synchronisation" x="42" y="-221">chR[id]?</label>
+			<label kind="comments" x="25" y="-221">6</label>
+			<nail x="17" y="-204"/>
+		</transition>
+		<transition>
+			<source ref="id27"/>
+			<target ref="id24"/>
+			<label kind="guard" x="-119" y="-204">NextNode[id]==4</label>
+			<label kind="synchronisation" x="-93" y="-221">chR[id]?</label>
+			<label kind="comments" x="-34" y="-221">5</label>
+		</transition>
+		<transition>
+			<source ref="id27"/>
+			<target ref="id28"/>
+			<label kind="guard" x="-170" y="-272">NextNode[id]==7</label>
+			<label kind="synchronisation" x="-161" y="-289">chR[id]?</label>
+			<label kind="comments" x="-93" y="-297">2</label>
+		</transition>
+		<transition>
+			<source ref="id27"/>
+			<target ref="id26"/>
+			<label kind="guard" x="68" y="-272">NextNode[id]==6</label>
+			<label kind="synchronisation" x="102" y="-289">chR[id]?</label>
+			<label kind="comments" x="68" y="-289">4</label>
+		</transition>
+	</template>
+	<template>
+		<name x="5" y="5">Robot4_Pos</name>
+		<declaration>// Place local declarations here.
+const id_t id=4;
+
+</declaration>
+		<location id="id30" x="204" y="399">
+			<name x="221" y="382">n10</name>
+		</location>
+		<location id="id31" x="0" y="399">
+			<name x="-34" y="382">n9</name>
+		</location>
+		<location id="id32" x="204" y="42">
+			<name x="204" y="8">n3</name>
+		</location>
+		<location id="id33" x="0" y="212">
+			<name x="8" y="178">n8</name>
+		</location>
+		<location id="id34" x="0" y="-136">
+			<name x="17" y="-144">n4</name>
+		</location>
+		<location id="id35" x="-238" y="42">
+			<name x="-263" y="8">n2</name>
+		</location>
+		<location id="id36" x="204" y="-272">
+			<name x="194" y="-306">n6</name>
+		</location>
+		<location id="id37" x="0" y="-272">
+			<name x="-10" y="-306">n5</name>
+		</location>
+		<location id="id38" x="-238" y="-272">
+			<name x="-248" y="-306">n7</name>
+		</location>
+		<location id="id39" x="0" y="42">
+			<name x="-25" y="17">n1</name>
+		</location>
+		<init ref="id30"/>
+		<transition>
+			<source ref="id38"/>
+			<target ref="id35"/>
+			<label kind="guard" x="-365" y="-127">NextNode[id]==2</label>
+			<label kind="synchronisation" x="-331" y="-144">chR[id]?</label>
+			<label kind="comments" x="-272" y="-144">8</label>
+			<nail x="-255" y="-127"/>
+		</transition>
+		<transition>
+			<source ref="id35"/>
+			<target ref="id38"/>
+			<label kind="guard" x="-229" y="-127">NextNode[id]==7</label>
+			<label kind="synchronisation" x="-204" y="-144">chR[id]?</label>
+			<label kind="comments" x="-221" y="-144">7</label>
+		</transition>
+		<transition>
+			<source ref="id39"/>
+			<target ref="id34"/>
+			<label kind="guard" x="25" y="-85">NextNode[id]==4</label>
+			<label kind="synchronisation" x="51" y="-102">chR[id]?</label>
+			<label kind="comments" x="25" y="-102">10</label>
+			<nail x="17" y="-68"/>
+		</transition>
+		<transition>
+			<source ref="id33"/>
+			<target ref="id30"/>
+			<label kind="guard" x="212" y="237">NextNode[id]==10</label>
+			<label kind="synchronisation" x="238" y="221">chR[id]?</label>
+			<label kind="comments" x="212" y="220">20</label>
+			<nail x="204" y="212"/>
+		</transition>
+		<transition>
+			<source ref="id30"/>
+			<target ref="id31"/>
+			<label kind="guard" x="68" y="433">NextNode[id]==9</label>
+			<label kind="synchronisation" x="68" y="416">chR[id]?</label>
+			<label kind="comments" x="42" y="416">22</label>
+			<nail x="102" y="416"/>
+		</transition>
+		<transition>
+			<source ref="id33"/>
+			<target ref="id39"/>
+			<label kind="guard" x="-136" y="127">NextNode[id]==1</label>
+			<label kind="synchronisation" x="-119" y="110">chR[id]?</label>
+			<label kind="comments" x="-51" y="110">15</label>
+			<nail x="-17" y="127"/>
+		</transition>
+		<transition>
+			<source ref="id31"/>
+			<target ref="id33"/>
+			<label kind="guard" x="-136" y="306">NextNode[id]==8</label>
+			<label kind="synchronisation" x="-127" y="289">chR[id]?</label>
+			<label kind="comments" x="-51" y="289">17</label>
+			<nail x="-17" y="306"/>
+		</transition>
+		<transition>
+			<source ref="id35"/>
+			<target ref="id39"/>
+			<label kind="guard" x="-204" y="-8">NextNode[id]==1</label>
+			<label kind="synchronisation" x="-161" y="8">chR[id]?</label>
+			<label kind="comments" x="-93" y="8">11</label>
+			<nail x="-119" y="25"/>
+		</transition>
+		<transition>
+			<source ref="id32"/>
+			<target ref="id39"/>
+			<label kind="guard" x="102" y="-8">NextNode[id]==1</label>
+			<label kind="synchronisation" x="102" y="8">chR[id]?</label>
+			<label kind="comments" x="68" y="8">13</label>
+			<nail x="102" y="25"/>
+		</transition>
+		<transition>
+			<source ref="id30"/>
+			<target ref="id33"/>
+			<label kind="guard" x="76" y="238">NextNode[id]==8</label>
+			<label kind="synchronisation" x="68" y="221">chR[id]?</label>
+			<label kind="comments" x="127" y="221">19</label>
+			<nail x="195" y="229"/>
+		</transition>
+		<transition>
+			<source ref="id31"/>
+			<target ref="id30"/>
+			<label kind="guard" x="68" y="374">NextNode[id]==10</label>
+			<label kind="synchronisation" x="68" y="357">chR[id]?</label>
+			<label kind="comments" x="42" y="374">21</label>
+		</transition>
+		<transition>
+			<source ref="id39"/>
+			<target ref="id35"/>
+			<label kind="guard" x="-204" y="59">NextNode[id]==2</label>
+			<label kind="synchronisation" x="-153" y="42">chR[id]?</label>
+			<label kind="comments" x="-93" y="51">12</label>
+		</transition>
+		<transition>
+			<source ref="id39"/>
+			<target ref="id32"/>
+			<label kind="guard" x="102" y="59">NextNode[id]==3</label>
+			<label kind="synchronisation" x="102" y="42">chR[id]?</label>
+			<label kind="comments" x="68" y="42">14</label>
+		</transition>
+		<transition>
+			<source ref="id33"/>
+			<target ref="id31"/>
+			<label kind="guard" x="8" y="306">NextNode[id]==9</label>
+			<label kind="synchronisation" x="34" y="289">chR[id]?</label>
+			<label kind="comments" x="8" y="289">18</label>
+		</transition>
+		<transition>
+			<source ref="id39"/>
+			<target ref="id33"/>
+			<label kind="guard" x="8" y="127">NextNode[id]==8</label>
+			<label kind="synchronisation" x="42" y="110">chR[id]?</label>
+			<label kind="comments" x="8" y="110">16</label>
+		</transition>
+		<transition>
+			<source ref="id34"/>
+			<target ref="id39"/>
+			<label kind="guard" x="-110" y="-85">NextNode[id]==1</label>
+			<label kind="synchronisation" x="-102" y="-102">chR[id]?</label>
+			<label kind="comments" x="-42" y="-102">9</label>
+		</transition>
+		<transition>
+			<source ref="id38"/>
+			<target ref="id37"/>
+			<label kind="guard" x="-204" y="-340">NextNode[id]==5</label>
+			<label kind="synchronisation" x="-161" y="-323">chR[id]?</label>
+			<label kind="comments" x="-93" y="-323">1</label>
+			<nail x="-110" y="-306"/>
+		</transition>
+		<transition>
+			<source ref="id36"/>
+			<target ref="id37"/>
+			<label kind="guard" x="93" y="-340">NextNode[id]==5</label>
+			<label kind="synchronisation" x="93" y="-323">chR[id]?</label>
+			<label kind="comments" x="68" y="-323">3</label>
+			<nail x="102" y="-306"/>
+		</transition>
+		<transition>
+			<source ref="id34"/>
+			<target ref="id37"/>
+			<label kind="guard" x="17" y="-204">NextNode[id]==5</label>
+			<label kind="synchronisation" x="42" y="-221">chR[id]?</label>
+			<label kind="comments" x="25" y="-221">6</label>
+			<nail x="17" y="-204"/>
+		</transition>
+		<transition>
+			<source ref="id37"/>
+			<target ref="id34"/>
+			<label kind="guard" x="-119" y="-204">NextNode[id]==4</label>
+			<label kind="synchronisation" x="-93" y="-221">chR[id]?</label>
+			<label kind="comments" x="-34" y="-221">5</label>
+		</transition>
+		<transition>
+			<source ref="id37"/>
+			<target ref="id38"/>
+			<label kind="guard" x="-170" y="-272">NextNode[id]==7</label>
+			<label kind="synchronisation" x="-161" y="-289">chR[id]?</label>
+			<label kind="comments" x="-93" y="-297">2</label>
+		</transition>
+		<transition>
+			<source ref="id37"/>
+			<target ref="id36"/>
+			<label kind="guard" x="68" y="-272">NextNode[id]==6</label>
+			<label kind="synchronisation" x="102" y="-289">chR[id]?</label>
+			<label kind="comments" x="68" y="-289">4</label>
+		</transition>
+	</template>
+	<template>
+		<name>Planner1</name>
+		<declaration>//------ RobotMover models movement planning and coordination between robots ---------
+// Separate Mover templates are needed because their initial locations are different (need initialization)
+const id_t id=1;   // shows robot id (needs initialization)
+//------------------------------------------------------------
+int [0,4] k;            // variable used for selecting the index of an outgoing edge randomly
+bool contact_reached;   // true if the robot has reached intruder's neighbour node
+
+// ---------- Function NEXT computes next edge when traversing shortest path to intruder -----------
+int [0,M+1] NEXT(int [0,N] CurrentPos,int [0,N] GoalPos)
+{
+int [0,M+1] NextEdge;
+int [0,4] i;
+int [0,7] j;
+while (EDGEs[CurrentPos][i]!=0 &amp;&amp; i&lt;3 &amp;&amp; NextEdge==0) // Loop over outgoing edges
+    {j=0;
+     while (NextEdge==0 &amp;&amp; j&lt;7 ) // Loop over reachable nodes
+        {if (SPA [EDGEs[CurrentPos][i]][j] == GoalPos || SPA [EDGEs[CurrentPos][i]][j] == A)
+        {NextEdge=EDGEs[CurrentPos][i];}
+        else  {j=j+1;}
+        };
+    {i=i+1;}
+    };
+return     NextEdge;
+}
+//--------------Function Move finds next node to move towards intruder (it uses function NEXT)-----------------------
+void Move(id_t id)
+{
+int [0,3] j;
+    NextEdge [id] = NEXT(Pos[id],Pos[0]);
+// if intruder in the next node and robot alone in the current one, then stay there, 
+// otherwise go to the next node
+// SPA[i][0] shows the destination node of edge i
+    if (Pos[0]==SPA[NextEdge[id]][0] &amp;&amp; Occ[Pos[id]]==1) // if alone in intruder's neighbour node
+        {true;}                             // then stay in this current node
+        else 
+        {if (SPA[NextEdge[id]][0]&gt;0) {NextNode[id]=SPA[NextEdge[id]][0];};} // else go to next node
+    if (Pos[id]==Pos[0])                    // if R and I are in the same node then 
+        {j=0;
+        while (Occ[SPA[EDGEs[Pos[0]][j]][0]]&gt;0 &amp;&amp; j&lt;3){j++;}
+        ;
+        {if (EDGEs[Pos[0]][j]&gt;0&amp;&amp;Occ[SPA[EDGEs[Pos[0]][j]][0]]==0) 
+            {NextNode[id]=SPA[EDGEs[Pos[0]][j]][0];}   // Move to the non occupied neighbour node
+        ;}
+        ;}
+//------Capture check---------
+    {                // checks if all neighbor nodes of the intruder node are occupied by robots
+    if (forall (i: int[0,3]) EDGEs[Pos[0]][i]&gt;0 imply Occ[SPA[EDGEs[Pos[0]][i]][0]]&gt;0) {Captured=true;}
+    else {Captured=false;};
+    };
+}
+
+void IS_CAPTURED()
+{
+if (forall (i: int[0,3]) EDGEs[Pos[0]][i]&gt;0 imply Occ[SPA[EDGEs[Pos[0]][i]][0]]&gt;0) {Captured=true;};
+}
+
+
+void IN_CONTACT()
+{
+for (i: int[0,3])
+{ 
+if (SPA[EDGEs[Pos[id]][i]][0]== Pos[0] &amp;&amp; Occ[Pos[id]]==1){contact_reached=1;}
+}
+}
+
+</declaration>
+		<location id="id40" x="-476" y="-756">
+			<name x="-629" y="-790">Picking_random_edge</name>
+			<committed/>
+		</location>
+		<location id="id41" x="-629" y="-459">
+			<name x="-697" y="-518">Holding_intruder</name>
+		</location>
+		<location id="id42" x="-476" y="-459">
+			<committed/>
+		</location>
+		<location id="id43" x="-476" y="-552">
+			<name x="-620" y="-569">Search_move_done</name>
+			<committed/>
+		</location>
+		<location id="id44" x="-476" y="-680">
+			<name x="-637" y="-697">Search_move_planned</name>
+			<committed/>
+		</location>
+		<location id="id45" x="-476" y="-833">
+			<name x="-595" y="-841">Start_searching</name>
+			<committed/>
+		</location>
+		<location id="id46" x="-476" y="-612">
+			<name x="-637" y="-629">Actuate_Search_move</name>
+		</location>
+		<location id="id47" x="-476" y="-161">
+			<name x="-637" y="-178">Chaseing_move_done</name>
+			<committed/>
+		</location>
+		<location id="id48" x="-629" y="-382">
+			<name x="-680" y="-365">Mission_Completed</name>
+		</location>
+		<location id="id49" x="-476" y="-237">
+			<name x="-646" y="-254">Actuate_Chaseing_move</name>
+		</location>
+		<location id="id50" x="-476" y="-314">
+			<name x="-620" y="-322">Next_move_planned</name>
+			<committed/>
+		</location>
+		<location id="id51" x="-476" y="-382">
+			<name x="-467" y="-408">Chaseing_Intruder</name>
+			<committed/>
+		</location>
+		<init ref="id45"/>
+		<transition>
+			<source ref="id41"/>
+			<target ref="id48"/>
+			<label kind="guard" x="-697" y="-433">Captured</label>
+		</transition>
+		<transition>
+			<source ref="id51"/>
+			<target ref="id41"/>
+			<label kind="guard" x="-603" y="-433">contact_reached 
+&amp;&amp; not Captured</label>
+		</transition>
+		<transition>
+			<source ref="id40"/>
+			<target ref="id44"/>
+			<label kind="assignment" x="-467" y="-739">NextEdge[id]=EDGEs[Pos[id]][k],
+NextNode[id]=SPA[NextEdge[id]][0]</label>
+		</transition>
+		<transition>
+			<source ref="id40"/>
+			<target ref="id40"/>
+			<label kind="guard" x="-535" y="-773">k&gt;0</label>
+			<label kind="assignment" x="-535" y="-756">k--</label>
+			<nail x="-510" y="-739"/>
+			<nail x="-510" y="-773"/>
+		</transition>
+		<transition>
+			<source ref="id42"/>
+			<target ref="id45"/>
+			<label kind="guard" x="-459" y="-476">not (contact_reached||Detected||Captured)</label>
+			<nail x="-238" y="-459"/>
+			<nail x="-238" y="-833"/>
+		</transition>
+		<transition>
+			<source ref="id42"/>
+			<target ref="id51"/>
+			<label kind="guard" x="-467" y="-425">Detected &amp;&amp; not Captured</label>
+			<label kind="comments" x="-459" y="-442">If Intruder detected by other R</label>
+		</transition>
+		<transition>
+			<source ref="id42"/>
+			<target ref="id41"/>
+			<label kind="guard" x="-612" y="-510">contact_reached 
+&amp;&amp; not Detected</label>
+			<label kind="assignment" x="-603" y="-476">Detected=1</label>
+		</transition>
+		<transition>
+			<source ref="id42"/>
+			<target ref="id48"/>
+			<label kind="guard" x="-569" y="-459">Captured</label>
+			<nail x="-586" y="-450"/>
+		</transition>
+		<transition>
+			<source ref="id43"/>
+			<target ref="id42"/>
+			<label kind="synchronisation" x="-535" y="-535">chR[id]!</label>
+			<label kind="assignment" x="-467" y="-535">Pos[id]= NextNode[id],
+Occ[Pos[id]]++,
+IN_CONTACT()</label>
+			<label kind="comments" x="-442" y="-552">Position_update</label>
+		</transition>
+		<transition>
+			<source ref="id44"/>
+			<target ref="id46"/>
+			<label kind="synchronisation" x="-467" y="-663">chR1[id]!</label>
+			<label kind="assignment" x="-467" y="-646">Occ[Pos[id]]--</label>
+		</transition>
+		<transition>
+			<source ref="id45"/>
+			<target ref="id40"/>
+			<label kind="assignment" x="-467" y="-799">k=BRANCHING[Pos[id]]-1</label>
+		</transition>
+		<transition>
+			<source ref="id46"/>
+			<target ref="id43"/>
+			<label kind="synchronisation" x="-467" y="-595">chR2[id]?</label>
+		</transition>
+		<transition>
+			<source ref="id47"/>
+			<target ref="id51"/>
+			<label kind="synchronisation" x="-408" y="-255">chR[id]!</label>
+			<label kind="assignment" x="-408" y="-238">Pos[id]= NextNode[id],
+Occ[Pos[id]]++,
+IN_CONTACT(),
+IS_CAPTURED()</label>
+			<label kind="comments" x="-348" y="-255">Position_update</label>
+			<nail x="-238" y="-161"/>
+			<nail x="-238" y="-382"/>
+		</transition>
+		<transition>
+			<source ref="id51"/>
+			<target ref="id48"/>
+			<label kind="guard" x="-578" y="-382">Captured</label>
+		</transition>
+		<transition>
+			<source ref="id50"/>
+			<target ref="id49"/>
+			<label kind="synchronisation" x="-544" y="-280">chR1[id]!</label>
+			<label kind="assignment" x="-467" y="-280">Occ[Pos[id]]--</label>
+		</transition>
+		<transition>
+			<source ref="id49"/>
+			<target ref="id47"/>
+			<label kind="synchronisation" x="-544" y="-212">chR2[id]?</label>
+		</transition>
+		<transition>
+			<source ref="id51"/>
+			<target ref="id50"/>
+			<label kind="guard" x="-467" y="-365">not contact_reached</label>
+			<label kind="assignment" x="-467" y="-348">Move(id)</label>
+		</transition>
+	</template>
+	<template>
+		<name>Planner2</name>
+		<declaration>//------ RobotMover models movement planning and coordination between robots ---------
+// Separate Mover templates are needed because their initial locations are different (need initialization)
+const id_t id=2;   // shows robot id (needs initialization)
+//------------------------------------------------------------
+int [0,4] k;            // variable used for selecting the index of an outgoing edge randomly
+bool contact_reached;   // true if the robot has reached intruder's neighbour node
+
+// ---------- Function NEXT computes next edge when traversing shortest path to intruder -----------
+int [0,M+1] NEXT(int [0,N] CurrentPos,int [0,N] GoalPos)
+{
+int [0,M+1] NextEdge;
+int [0,4] i;
+int [0,7] j;
+while (EDGEs[CurrentPos][i]!=0 &amp;&amp; i&lt;3 &amp;&amp; NextEdge==0) // Loop over outgoing edges
+    {j=0;
+     while (NextEdge==0 &amp;&amp; j&lt;7 ) // Loop over reachable nodes
+        {if (SPA [EDGEs[CurrentPos][i]][j] == GoalPos || SPA [EDGEs[CurrentPos][i]][j] == A)
+        {NextEdge=EDGEs[CurrentPos][i];}
+        else  {j=j+1;}
+        };
+    {i=i+1;}
+    };
+return     NextEdge;
+}
+//--------------Function Move finds next node to move towards intruder (it uses function NEXT)-----------------------
+void Move(id_t id)
+{
+int [0,3] j;
+    NextEdge [id] = NEXT(Pos[id],Pos[0]);
+// if intruder in the next node and robot alone in the current one, then stay there, 
+// otherwise go to the next node
+// SPA[i][0] shows the destination node of edge i
+    if (Pos[0]==SPA[NextEdge[id]][0] &amp;&amp; Occ[Pos[id]]==1) // if alone in intruder's neighbour node
+        {true;}                             // then stay in this current node
+        else 
+        {if (SPA[NextEdge[id]][0]&gt;0) {NextNode[id]=SPA[NextEdge[id]][0];};} // else go to next node
+    if (Pos[id]==Pos[0])                    // if R and I are in the same node then 
+        {j=0;
+        while (Occ[SPA[EDGEs[Pos[0]][j]][0]]&gt;0 &amp;&amp; j&lt;3){j++;}
+        ;
+        {if (EDGEs[Pos[0]][j]&gt;0&amp;&amp;Occ[SPA[EDGEs[Pos[0]][j]][0]]==0) 
+            {NextNode[id]=SPA[EDGEs[Pos[0]][j]][0];}   // Move to the non occupied neighbour node
+        ;}
+        ;}
+//------Capture check---------
+    {                // checks if all neighbor nodes of the intruder node are occupied by robots
+    if (forall (i: int[0,3]) EDGEs[Pos[0]][i]&gt;0 imply Occ[SPA[EDGEs[Pos[0]][i]][0]]&gt;0) {Captured=true;}
+    else {Captured=false;};
+    };
+}
+
+void IS_CAPTURED()
+{
+if (forall (i: int[0,3]) EDGEs[Pos[0]][i]&gt;0 imply Occ[SPA[EDGEs[Pos[0]][i]][0]]&gt;0) {Captured=true;};
+}
+
+void IN_CONTACT()
+{
+for (i: int[0,3])
+{ 
+if (SPA[EDGEs[Pos[id]][i]][0]== Pos[0] &amp;&amp; Occ[Pos[id]]==1){contact_reached=1;}
+}
+}
+
+</declaration>
+		<location id="id52" x="-476" y="-756">
+			<name x="-629" y="-790">Picking_random_edge</name>
+			<committed/>
+		</location>
+		<location id="id53" x="-629" y="-459">
+			<name x="-714" y="-501">Holding_intruder</name>
+		</location>
+		<location id="id54" x="-476" y="-459">
+			<committed/>
+		</location>
+		<location id="id55" x="-476" y="-552">
+			<name x="-620" y="-569">Search_move_done</name>
+			<committed/>
+		</location>
+		<location id="id56" x="-476" y="-680">
+			<name x="-637" y="-697">Search_move_planned</name>
+			<committed/>
+		</location>
+		<location id="id57" x="-476" y="-833">
+			<name x="-595" y="-841">Start_searching</name>
+			<committed/>
+		</location>
+		<location id="id58" x="-476" y="-612">
+			<name x="-637" y="-629">Actuate_Search_move</name>
+		</location>
+		<location id="id59" x="-476" y="-161">
+			<name x="-637" y="-178">Chaseing_move_done</name>
+			<committed/>
+		</location>
+		<location id="id60" x="-629" y="-382">
+			<name x="-680" y="-365">Mission_Completed</name>
+		</location>
+		<location id="id61" x="-476" y="-237">
+			<name x="-646" y="-254">Actuate_Chaseing_move</name>
+		</location>
+		<location id="id62" x="-476" y="-314">
+			<name x="-620" y="-322">Next_move_planned</name>
+			<committed/>
+		</location>
+		<location id="id63" x="-476" y="-382">
+			<name x="-467" y="-408">Chaseing_Intruder</name>
+			<committed/>
+		</location>
+		<init ref="id57"/>
+		<transition>
+			<source ref="id53"/>
+			<target ref="id60"/>
+			<label kind="guard" x="-697" y="-442">Captured</label>
+		</transition>
+		<transition>
+			<source ref="id63"/>
+			<target ref="id53"/>
+			<label kind="guard" x="-603" y="-433">contact_reached 
+&amp;&amp; not Captured</label>
+		</transition>
+		<transition>
+			<source ref="id52"/>
+			<target ref="id56"/>
+			<label kind="assignment" x="-467" y="-739">NextEdge[id]=EDGEs[Pos[id]][k],
+NextNode[id]=SPA[NextEdge[id]][0]</label>
+		</transition>
+		<transition>
+			<source ref="id52"/>
+			<target ref="id52"/>
+			<label kind="guard" x="-535" y="-773">k&gt;0</label>
+			<label kind="assignment" x="-535" y="-756">k--</label>
+			<nail x="-510" y="-739"/>
+			<nail x="-510" y="-773"/>
+		</transition>
+		<transition>
+			<source ref="id54"/>
+			<target ref="id57"/>
+			<label kind="guard" x="-459" y="-476">not (contact_reached||Detected||Captured)</label>
+			<nail x="-238" y="-459"/>
+			<nail x="-238" y="-833"/>
+		</transition>
+		<transition>
+			<source ref="id54"/>
+			<target ref="id63"/>
+			<label kind="guard" x="-467" y="-425">Detected &amp;&amp; not Captured</label>
+			<label kind="comments" x="-459" y="-442">If Intruder detected by other R</label>
+		</transition>
+		<transition>
+			<source ref="id54"/>
+			<target ref="id53"/>
+			<label kind="guard" x="-603" y="-510">contact_reached 
+&amp;&amp; not Detected</label>
+			<label kind="assignment" x="-586" y="-476">Detected=1</label>
+		</transition>
+		<transition>
+			<source ref="id54"/>
+			<target ref="id60"/>
+			<label kind="guard" x="-586" y="-459">Captured</label>
+			<nail x="-603" y="-433"/>
+		</transition>
+		<transition>
+			<source ref="id55"/>
+			<target ref="id54"/>
+			<label kind="synchronisation" x="-535" y="-535">chR[id]!</label>
+			<label kind="assignment" x="-467" y="-535">Pos[id]= NextNode[id],
+Occ[Pos[id]]++,
+IN_CONTACT()</label>
+			<label kind="comments" x="-442" y="-552">Position_update</label>
+		</transition>
+		<transition>
+			<source ref="id56"/>
+			<target ref="id58"/>
+			<label kind="synchronisation" x="-467" y="-663">chR1[id]!</label>
+			<label kind="assignment" x="-467" y="-646">Occ[Pos[id]]--</label>
+		</transition>
+		<transition>
+			<source ref="id57"/>
+			<target ref="id52"/>
+			<label kind="assignment" x="-467" y="-799">k=BRANCHING[Pos[id]]-1</label>
+		</transition>
+		<transition>
+			<source ref="id58"/>
+			<target ref="id55"/>
+			<label kind="synchronisation" x="-467" y="-595">chR2[id]?</label>
+		</transition>
+		<transition>
+			<source ref="id59"/>
+			<target ref="id63"/>
+			<label kind="synchronisation" x="-416" y="-255">chR[id]!</label>
+			<label kind="assignment" x="-408" y="-238">Pos[id]= NextNode[id],
+Occ[Pos[id]]++,
+IN_CONTACT(),
+IS_CAPTURED()</label>
+			<label kind="comments" x="-348" y="-255">Position_update</label>
+			<nail x="-238" y="-161"/>
+			<nail x="-238" y="-382"/>
+		</transition>
+		<transition>
+			<source ref="id63"/>
+			<target ref="id60"/>
+			<label kind="guard" x="-586" y="-382">Captured</label>
+		</transition>
+		<transition>
+			<source ref="id62"/>
+			<target ref="id61"/>
+			<label kind="synchronisation" x="-535" y="-280">chR1[id]!</label>
+			<label kind="assignment" x="-467" y="-280">Occ[Pos[id]]--</label>
+		</transition>
+		<transition>
+			<source ref="id61"/>
+			<target ref="id59"/>
+			<label kind="synchronisation" x="-544" y="-212">chR2[id]?</label>
+		</transition>
+		<transition>
+			<source ref="id63"/>
+			<target ref="id62"/>
+			<label kind="guard" x="-467" y="-374">not contact_reached</label>
+			<label kind="assignment" x="-467" y="-348">Move(id)</label>
+		</transition>
+	</template>
+	<template>
+		<name>Planner3</name>
+		<declaration>//------ RobotMover models movement planning and coordination between robots ---------
+// Separate Mover templates are needed because their initial locations are different (need initialization)
+const id_t id=3;   // shows robot id (needs initialization)
+//------------------------------------------------------------
+int [0,4] k;            // variable used for selecting the index of an outgoing edge randomly
+bool contact_reached;   // true if the robot has reached intruder's neighbour node
+
+// ---------- Function NEXT computes next edge when traversing shortest path to intruder -----------
+int [0,M+1] NEXT(int [0,N] CurrentPos,int [0,N] GoalPos)
+{
+int [0,M+1] NextEdge;
+int [0,4] i;
+int [0,7] j;
+while (EDGEs[CurrentPos][i]!=0 &amp;&amp; i&lt;3 &amp;&amp; NextEdge==0) // Loop over outgoing edges
+    {j=0;
+     while (NextEdge==0 &amp;&amp; j&lt;7 ) // Loop over reachable nodes
+        {if (SPA [EDGEs[CurrentPos][i]][j] == GoalPos || SPA [EDGEs[CurrentPos][i]][j] == A)
+        {NextEdge=EDGEs[CurrentPos][i];}
+        else  {j=j+1;}
+        };
+    {i=i+1;}
+    };
+return     NextEdge;
+}
+//--------------Function Move finds next node to move towards intruder (it uses function NEXT)-----------------------
+void Move(id_t id)
+{
+int [0,3] j;
+    NextEdge [id] = NEXT(Pos[id],Pos[0]);
+// if intruder in the next node and robot alone in the current one, then stay there, 
+// otherwise go to the next node
+// SPA[i][0] shows the destination node of edge i
+    if (Pos[0]==SPA[NextEdge[id]][0] &amp;&amp; Occ[Pos[id]]==1) // if alone in intruder's neighbour node
+        {true;}                             // then stay in this current node
+        else 
+        {if (SPA[NextEdge[id]][0]&gt;0) {NextNode[id]=SPA[NextEdge[id]][0];};} // else go to next node
+    if (Pos[id]==Pos[0])                    // if R and I are in the same node then 
+        {j=0;
+        while (Occ[SPA[EDGEs[Pos[0]][j]][0]]&gt;0 &amp;&amp; j&lt;3){j++;}
+        ;
+        {if (EDGEs[Pos[0]][j]&gt;0&amp;&amp;Occ[SPA[EDGEs[Pos[0]][j]][0]]==0) 
+            {NextNode[id]=SPA[EDGEs[Pos[0]][j]][0];}   // Move to the non occupied neighbour node
+        ;}
+        ;}
+//------Capture check---------
+    {                // checks if all neighbor nodes of the intruder node are occupied by robots
+    if (forall (i: int[0,3]) EDGEs[Pos[0]][i]&gt;0 imply Occ[SPA[EDGEs[Pos[0]][i]][0]]&gt;0) {Captured=true;}
+    else {Captured=false;};
+    };
+}
+
+void IS_CAPTURED()
+{
+if (forall (i: int[0,3]) EDGEs[Pos[0]][i]&gt;0 imply Occ[SPA[EDGEs[Pos[0]][i]][0]]&gt;0) {Captured=true;};
+}
+
+void IN_CONTACT()
+{
+for (i: int[0,3])
+{ 
+if (SPA[EDGEs[Pos[id]][i]][0]== Pos[0] &amp;&amp; Occ[Pos[id]]==1){contact_reached=1;}
+}
+}
+
+</declaration>
+		<location id="id64" x="-476" y="-756">
+			<name x="-629" y="-790">Picking_random_edge</name>
+			<committed/>
+		</location>
+		<location id="id65" x="-629" y="-459">
+			<name x="-714" y="-501">Holding_intruder</name>
+		</location>
+		<location id="id66" x="-476" y="-459">
+			<committed/>
+		</location>
+		<location id="id67" x="-476" y="-552">
+			<name x="-620" y="-569">Search_move_done</name>
+			<committed/>
+		</location>
+		<location id="id68" x="-476" y="-680">
+			<name x="-637" y="-697">Search_move_planned</name>
+			<committed/>
+		</location>
+		<location id="id69" x="-476" y="-833">
+			<name x="-595" y="-841">Start_searching</name>
+			<committed/>
+		</location>
+		<location id="id70" x="-476" y="-612">
+			<name x="-637" y="-629">Actuate_Search_move</name>
+		</location>
+		<location id="id71" x="-476" y="-161">
+			<name x="-637" y="-178">Chaseing_move_done</name>
+			<committed/>
+		</location>
+		<location id="id72" x="-629" y="-382">
+			<name x="-680" y="-365">Mission_Completed</name>
+		</location>
+		<location id="id73" x="-476" y="-237">
+			<name x="-646" y="-254">Actuate_Chaseing_move</name>
+		</location>
+		<location id="id74" x="-476" y="-314">
+			<name x="-620" y="-322">Next_move_planned</name>
+			<committed/>
+		</location>
+		<location id="id75" x="-476" y="-382">
+			<name x="-467" y="-408">Chaseing_Intruder</name>
+			<committed/>
+		</location>
+		<init ref="id69"/>
+		<transition>
+			<source ref="id65"/>
+			<target ref="id72"/>
+			<label kind="guard" x="-697" y="-433">Captured</label>
+			<nail x="-629" y="-450"/>
+		</transition>
+		<transition>
+			<source ref="id75"/>
+			<target ref="id65"/>
+			<label kind="guard" x="-603" y="-433">contact_reached 
+&amp;&amp; not Captured</label>
+		</transition>
+		<transition>
+			<source ref="id64"/>
+			<target ref="id68"/>
+			<label kind="assignment" x="-467" y="-739">NextEdge[id]=EDGEs[Pos[id]][k],
+NextNode[id]=SPA[NextEdge[id]][0]</label>
+		</transition>
+		<transition>
+			<source ref="id64"/>
+			<target ref="id64"/>
+			<label kind="guard" x="-535" y="-773">k&gt;0</label>
+			<label kind="assignment" x="-535" y="-756">k--</label>
+			<nail x="-510" y="-739"/>
+			<nail x="-510" y="-773"/>
+		</transition>
+		<transition>
+			<source ref="id66"/>
+			<target ref="id69"/>
+			<label kind="guard" x="-459" y="-476">not (contact_reached||Detected||Captured)</label>
+			<nail x="-238" y="-459"/>
+			<nail x="-238" y="-833"/>
+		</transition>
+		<transition>
+			<source ref="id66"/>
+			<target ref="id75"/>
+			<label kind="guard" x="-467" y="-425">Detected &amp;&amp; not Captured</label>
+			<label kind="comments" x="-459" y="-442">If Intruder detected by other R</label>
+		</transition>
+		<transition>
+			<source ref="id66"/>
+			<target ref="id65"/>
+			<label kind="guard" x="-603" y="-510">contact_reached 
+&amp;&amp; not Detected</label>
+			<label kind="assignment" x="-586" y="-476">Detected=1</label>
+		</transition>
+		<transition>
+			<source ref="id66"/>
+			<target ref="id72"/>
+			<label kind="guard" x="-595" y="-459">Captured</label>
+			<nail x="-603" y="-433"/>
+		</transition>
+		<transition>
+			<source ref="id67"/>
+			<target ref="id66"/>
+			<label kind="synchronisation" x="-535" y="-535">chR[id]!</label>
+			<label kind="assignment" x="-467" y="-535">Pos[id]= NextNode[id],
+Occ[Pos[id]]++,
+IN_CONTACT()</label>
+			<label kind="comments" x="-442" y="-552">Position_update</label>
+		</transition>
+		<transition>
+			<source ref="id68"/>
+			<target ref="id70"/>
+			<label kind="synchronisation" x="-467" y="-663">chR1[id]!</label>
+			<label kind="assignment" x="-467" y="-646">Occ[Pos[id]]--</label>
+		</transition>
+		<transition>
+			<source ref="id69"/>
+			<target ref="id64"/>
+			<label kind="assignment" x="-467" y="-799">k=BRANCHING[Pos[id]]-1</label>
+		</transition>
+		<transition>
+			<source ref="id70"/>
+			<target ref="id67"/>
+			<label kind="synchronisation" x="-467" y="-595">chR2[id]?</label>
+		</transition>
+		<transition>
+			<source ref="id71"/>
+			<target ref="id75"/>
+			<label kind="synchronisation" x="-416" y="-255">chR[id]!</label>
+			<label kind="assignment" x="-408" y="-238">Pos[id]= NextNode[id],
+Occ[Pos[id]]++,
+IN_CONTACT(),
+IS_CAPTURED()</label>
+			<label kind="comments" x="-348" y="-263">Position_update</label>
+			<nail x="-238" y="-161"/>
+			<nail x="-238" y="-382"/>
+		</transition>
+		<transition>
+			<source ref="id75"/>
+			<target ref="id72"/>
+			<label kind="guard" x="-578" y="-382">Captured</label>
+		</transition>
+		<transition>
+			<source ref="id74"/>
+			<target ref="id73"/>
+			<label kind="synchronisation" x="-535" y="-280">chR1[id]!</label>
+			<label kind="assignment" x="-467" y="-280">Occ[Pos[id]]--</label>
+		</transition>
+		<transition>
+			<source ref="id73"/>
+			<target ref="id71"/>
+			<label kind="synchronisation" x="-544" y="-212">chR2[id]?</label>
+		</transition>
+		<transition>
+			<source ref="id75"/>
+			<target ref="id74"/>
+			<label kind="guard" x="-467" y="-374">not contact_reached</label>
+			<label kind="assignment" x="-467" y="-348">Move(id)</label>
+		</transition>
+	</template>
+	<template>
+		<name>Planner4</name>
+		<declaration>//------ RobotMover models movement planning and coordination between robots ---------
+// Separate Mover templates are needed because their initial locations are different (need initialization)
+const id_t id=4;   // shows robot id (needs initialization)
+//------------------------------------------------------------
+int [0,4] k;            // variable used for selecting the index of an outgoing edge randomly
+bool contact_reached;   // true if the robot has reached intruder's neighbour node
+
+// ---------- Function NEXT computes next edge when traversing shortest path to intruder -----------
+int [0,M+1] NEXT(int [0,N] CurrentPos,int [0,N] GoalPos)
+{
+int [0,M+1] NextEdge;
+int [0,4] i;
+int [0,7] j;
+while (EDGEs[CurrentPos][i]!=0 &amp;&amp; i&lt;3 &amp;&amp; NextEdge==0) // Loop over outgoing edges
+    {j=0;
+     while (NextEdge==0 &amp;&amp; j&lt;7 ) // Loop over reachable nodes
+        {if (SPA [EDGEs[CurrentPos][i]][j] == GoalPos || SPA [EDGEs[CurrentPos][i]][j] == A)
+        {NextEdge=EDGEs[CurrentPos][i];}
+        else  {j=j+1;}
+        };
+    {i=i+1;}
+    };
+return     NextEdge;
+}
+//--------------Function Move finds next node to move towards intruder (it uses function NEXT)-----------------------
+void Move(id_t id)
+{
+int [0,3] j;
+    NextEdge [id] = NEXT(Pos[id],Pos[0]);
+// if intruder in the next node and robot alone in the current one, then stay there, 
+// otherwise go to the next node
+// SPA[i][0] shows the destination node of edge i
+    if (Pos[0]==SPA[NextEdge[id]][0] &amp;&amp; Occ[Pos[id]]==1) // if alone in intruder's neighbour node
+        {true;}                             // then stay in this current node
+        else 
+        {if (SPA[NextEdge[id]][0]&gt;0) {NextNode[id]=SPA[NextEdge[id]][0];};} // else go to next node
+    if (Pos[id]==Pos[0])                    // if R and I are in the same node then 
+        {j=0;
+        while (Occ[SPA[EDGEs[Pos[0]][j]][0]]&gt;0 &amp;&amp; j&lt;3){j++;}
+        ;
+        {if (EDGEs[Pos[0]][j]&gt;0&amp;&amp;Occ[SPA[EDGEs[Pos[0]][j]][0]]==0) 
+            {NextNode[id]=SPA[EDGEs[Pos[0]][j]][0];}   // Move to the non occupied neighbour node
+        ;}
+        ;}
+//------Capture check---------
+    {                // checks if all neighbor nodes of the intruder node are occupied by robots
+    if (forall (i: int[0,3]) EDGEs[Pos[0]][i]&gt;0 imply Occ[SPA[EDGEs[Pos[0]][i]][0]]&gt;0) {Captured=true;}
+    else {Captured=false;};
+    };
+}
+
+void IS_CAPTURED()
+{
+if (forall (i: int[0,3]) EDGEs[Pos[0]][i]&gt;0 imply Occ[SPA[EDGEs[Pos[0]][i]][0]]&gt;0) {Captured=true;};
+}
+
+void IN_CONTACT()
+{
+for (i: int[0,3])
+{ 
+if (SPA[EDGEs[Pos[id]][i]][0]== Pos[0] &amp;&amp; Occ[Pos[id]]==1){contact_reached=1;}
+}
+}
+
+</declaration>
+		<location id="id76" x="-476" y="-756">
+			<name x="-629" y="-790">Picking_random_edge</name>
+			<committed/>
+		</location>
+		<location id="id77" x="-629" y="-459">
+			<name x="-722" y="-493">Holding_intruder</name>
+		</location>
+		<location id="id78" x="-476" y="-459">
+			<committed/>
+		</location>
+		<location id="id79" x="-476" y="-552">
+			<name x="-620" y="-569">Search_move_done</name>
+			<committed/>
+		</location>
+		<location id="id80" x="-476" y="-680">
+			<name x="-637" y="-697">Search_move_planned</name>
+			<committed/>
+		</location>
+		<location id="id81" x="-476" y="-833">
+			<name x="-595" y="-841">Start_searching</name>
+			<committed/>
+		</location>
+		<location id="id82" x="-476" y="-612">
+			<name x="-637" y="-629">Actuate_Search_move</name>
+		</location>
+		<location id="id83" x="-476" y="-161">
+			<name x="-637" y="-178">Chaseing_move_done</name>
+			<committed/>
+		</location>
+		<location id="id84" x="-629" y="-382">
+			<name x="-680" y="-365">Mission_Completed</name>
+		</location>
+		<location id="id85" x="-476" y="-237">
+			<name x="-646" y="-254">Actuate_Chaseing_move</name>
+		</location>
+		<location id="id86" x="-476" y="-314">
+			<name x="-620" y="-322">Next_move_planned</name>
+			<committed/>
+		</location>
+		<location id="id87" x="-476" y="-382">
+			<name x="-467" y="-408">Chaseing_Intruder</name>
+			<committed/>
+		</location>
+		<init ref="id81"/>
+		<transition>
+			<source ref="id77"/>
+			<target ref="id84"/>
+			<label kind="guard" x="-697" y="-433">Captured</label>
+		</transition>
+		<transition>
+			<source ref="id87"/>
+			<target ref="id77"/>
+			<label kind="guard" x="-595" y="-433">contact_reached 
+&amp;&amp; not Captured</label>
+		</transition>
+		<transition>
+			<source ref="id76"/>
+			<target ref="id80"/>
+			<label kind="assignment" x="-467" y="-739">NextEdge[id]=EDGEs[Pos[id]][k],
+NextNode[id]=SPA[NextEdge[id]][0]</label>
+		</transition>
+		<transition>
+			<source ref="id76"/>
+			<target ref="id76"/>
+			<label kind="guard" x="-535" y="-773">k&gt;0</label>
+			<label kind="assignment" x="-535" y="-756">k--</label>
+			<nail x="-510" y="-739"/>
+			<nail x="-510" y="-773"/>
+		</transition>
+		<transition>
+			<source ref="id78"/>
+			<target ref="id81"/>
+			<label kind="guard" x="-459" y="-476">not (contact_reached||Detected||Captured)</label>
+			<nail x="-238" y="-459"/>
+			<nail x="-238" y="-833"/>
+		</transition>
+		<transition>
+			<source ref="id78"/>
+			<target ref="id87"/>
+			<label kind="guard" x="-467" y="-425">Detected &amp;&amp; not Captured</label>
+			<label kind="comments" x="-459" y="-442">If Intruder detected by other R</label>
+		</transition>
+		<transition>
+			<source ref="id78"/>
+			<target ref="id77"/>
+			<label kind="guard" x="-603" y="-510">contact_reached 
+&amp;&amp; not Detected</label>
+			<label kind="assignment" x="-586" y="-476">Detected=1</label>
+		</transition>
+		<transition>
+			<source ref="id78"/>
+			<target ref="id84"/>
+			<label kind="guard" x="-595" y="-459">Captured</label>
+			<nail x="-603" y="-433"/>
+		</transition>
+		<transition>
+			<source ref="id79"/>
+			<target ref="id78"/>
+			<label kind="synchronisation" x="-535" y="-535">chR[id]!</label>
+			<label kind="assignment" x="-467" y="-535">Pos[id]= NextNode[id],
+Occ[Pos[id]]++,
+IN_CONTACT()</label>
+			<label kind="comments" x="-442" y="-552">Position_update</label>
+		</transition>
+		<transition>
+			<source ref="id80"/>
+			<target ref="id82"/>
+			<label kind="synchronisation" x="-467" y="-663">chR1[id]!</label>
+			<label kind="assignment" x="-467" y="-646">Occ[Pos[id]]--</label>
+		</transition>
+		<transition>
+			<source ref="id81"/>
+			<target ref="id76"/>
+			<label kind="assignment" x="-467" y="-799">k=BRANCHING[Pos[id]]-1</label>
+		</transition>
+		<transition>
+			<source ref="id82"/>
+			<target ref="id79"/>
+			<label kind="synchronisation" x="-467" y="-595">chR2[id]?</label>
+		</transition>
+		<transition>
+			<source ref="id83"/>
+			<target ref="id87"/>
+			<label kind="synchronisation" x="-408" y="-255">chR[id]!</label>
+			<label kind="assignment" x="-416" y="-238">Pos[id]= NextNode[id],
+Occ[Pos[id]]++,
+IN_CONTACT(),
+IS_CAPTURED()</label>
+			<label kind="comments" x="-348" y="-263">Position_update</label>
+			<nail x="-238" y="-161"/>
+			<nail x="-238" y="-382"/>
+		</transition>
+		<transition>
+			<source ref="id87"/>
+			<target ref="id84"/>
+			<label kind="guard" x="-586" y="-382">Captured</label>
+		</transition>
+		<transition>
+			<source ref="id86"/>
+			<target ref="id85"/>
+			<label kind="synchronisation" x="-535" y="-280">chR1[id]!</label>
+			<label kind="assignment" x="-467" y="-280">Occ[Pos[id]]--</label>
+		</transition>
+		<transition>
+			<source ref="id85"/>
+			<target ref="id83"/>
+			<label kind="synchronisation" x="-544" y="-212">chR2[id]?</label>
+		</transition>
+		<transition>
+			<source ref="id87"/>
+			<target ref="id86"/>
+			<label kind="guard" x="-467" y="-374">not contact_reached</label>
+			<label kind="assignment" x="-467" y="-348">Move(id)</label>
+		</transition>
+	</template>
+	<template>
+		<name>Caller1</name>
+		<declaration>const id_t id=1;
+clock cl;</declaration>
+		<location id="id88" x="-161" y="51">
+			<name x="-280" y="68">R_response_received</name>
+			<committed/>
+		</location>
+		<location id="id89" x="-161" y="-8">
+			<name x="-314" y="-17">Waiting_R_response</name>
+			<label kind="invariant" x="-144" y="-17">cl&lt;=1</label>
+		</location>
+		<location id="id90" x="-161" y="-76">
+			<name x="-229" y="-110">Initiate_move</name>
+			<committed/>
+		</location>
+		<location id="id91" x="-374" y="-76">
+			<name x="-391" y="-110">Wait_move_target</name>
+		</location>
+		<init ref="id91"/>
+		<transition>
+			<source ref="id88"/>
+			<target ref="id91"/>
+			<label kind="synchronisation" x="-365" y="34">chR2[id]!</label>
+			<nail x="-374" y="51"/>
+		</transition>
+		<transition>
+			<source ref="id89"/>
+			<target ref="id88"/>
+			<label kind="guard" x="-153" y="8">cl==1</label>
+			<label kind="synchronisation" x="-306" y="8">o_robot_1_response?</label>
+		</transition>
+		<transition>
+			<source ref="id91"/>
+			<target ref="id90"/>
+			<label kind="synchronisation" x="-263" y="-93">chR1[id]?</label>
+			<label kind="assignment" x="-357" y="-76">i_robot_1_goto=NextNode[id]</label>
+		</transition>
+		<transition>
+			<source ref="id90"/>
+			<target ref="id89"/>
+			<label kind="synchronisation" x="-229" y="-51">i_robot_1!</label>
+			<label kind="assignment" x="-153" y="-51">cl=0</label>
+		</transition>
+	</template>
+	<template>
+		<name>Caller2</name>
+		<declaration>const id_t id=2;
+clock cl;</declaration>
+		<location id="id92" x="-161" y="51">
+			<name x="-280" y="68">R_response_received</name>
+			<committed/>
+		</location>
+		<location id="id93" x="-161" y="-8">
+			<name x="-314" y="-17">Waiting_R_response</name>
+			<label kind="invariant" x="-144" y="-17">cl&lt;=1</label>
+		</location>
+		<location id="id94" x="-161" y="-76">
+			<name x="-229" y="-110">Initiate_move</name>
+			<committed/>
+		</location>
+		<location id="id95" x="-374" y="-76">
+			<name x="-391" y="-110">Wait_move_target</name>
+		</location>
+		<init ref="id95"/>
+		<transition>
+			<source ref="id92"/>
+			<target ref="id95"/>
+			<label kind="synchronisation" x="-365" y="34">chR2[id]!</label>
+			<nail x="-374" y="51"/>
+		</transition>
+		<transition>
+			<source ref="id93"/>
+			<target ref="id92"/>
+			<label kind="guard" x="-153" y="8">cl==1</label>
+			<label kind="synchronisation" x="-306" y="8">o_robot_2_response?</label>
+		</transition>
+		<transition>
+			<source ref="id95"/>
+			<target ref="id94"/>
+			<label kind="synchronisation" x="-272" y="-93">chR1[id]?</label>
+			<label kind="assignment" x="-365" y="-76">i_robot_2_goto=NextNode[id]</label>
+		</transition>
+		<transition>
+			<source ref="id94"/>
+			<target ref="id93"/>
+			<label kind="synchronisation" x="-238" y="-51">i_robot_2!</label>
+			<label kind="assignment" x="-153" y="-51">cl=0</label>
+		</transition>
+	</template>
+	<template>
+		<name>Caller3</name>
+		<declaration>const id_t id=3;
+clock cl;</declaration>
+		<location id="id96" x="-161" y="51">
+			<name x="-280" y="68">R_response_received</name>
+			<committed/>
+		</location>
+		<location id="id97" x="-161" y="-8">
+			<name x="-314" y="-17">Waiting_R_response</name>
+			<label kind="invariant" x="-144" y="-17">cl&lt;=1</label>
+		</location>
+		<location id="id98" x="-161" y="-76">
+			<name x="-229" y="-110">Initiate_move</name>
+			<committed/>
+		</location>
+		<location id="id99" x="-374" y="-76">
+			<name x="-391" y="-110">Wait_move_target</name>
+		</location>
+		<init ref="id99"/>
+		<transition>
+			<source ref="id96"/>
+			<target ref="id99"/>
+			<label kind="synchronisation" x="-365" y="34">chR2[id]!</label>
+			<nail x="-374" y="51"/>
+		</transition>
+		<transition>
+			<source ref="id97"/>
+			<target ref="id96"/>
+			<label kind="guard" x="-153" y="8">cl==1</label>
+			<label kind="synchronisation" x="-306" y="8">o_robot_3_response?</label>
+		</transition>
+		<transition>
+			<source ref="id99"/>
+			<target ref="id98"/>
+			<label kind="synchronisation" x="-255" y="-93">chR1[id]?</label>
+			<label kind="assignment" x="-357" y="-76">i_robot_3_goto=NextNode[id]</label>
+		</transition>
+		<transition>
+			<source ref="id98"/>
+			<target ref="id97"/>
+			<label kind="synchronisation" x="-229" y="-51">i_robot_3!</label>
+			<label kind="assignment" x="-153" y="-51">cl=0</label>
+		</transition>
+	</template>
+	<template>
+		<name>Caller4</name>
+		<declaration>const id_t id=4;
+clock cl;</declaration>
+		<location id="id100" x="-161" y="51">
+			<name x="-280" y="68">R_response_received</name>
+			<committed/>
+		</location>
+		<location id="id101" x="-161" y="-8">
+			<name x="-314" y="-25">Waiting_R_response</name>
+			<label kind="invariant" x="-144" y="-17">cl&lt;=1</label>
+		</location>
+		<location id="id102" x="-161" y="-76">
+			<name x="-221" y="-110">Initiate_move</name>
+			<committed/>
+		</location>
+		<location id="id103" x="-374" y="-76">
+			<name x="-391" y="-110">Wait_move_target</name>
+		</location>
+		<init ref="id103"/>
+		<transition>
+			<source ref="id100"/>
+			<target ref="id103"/>
+			<label kind="synchronisation" x="-365" y="34">chR2[id]!</label>
+			<nail x="-374" y="51"/>
+		</transition>
+		<transition>
+			<source ref="id101"/>
+			<target ref="id100"/>
+			<label kind="guard" x="-153" y="8">cl==1</label>
+			<label kind="synchronisation" x="-306" y="8">o_robot_4_response?</label>
+		</transition>
+		<transition>
+			<source ref="id103"/>
+			<target ref="id102"/>
+			<label kind="synchronisation" x="-263" y="-93">chR1[id]?</label>
+			<label kind="assignment" x="-357" y="-76">i_robot_4_goto=NextNode[id]</label>
+		</transition>
+		<transition>
+			<source ref="id102"/>
+			<target ref="id101"/>
+			<label kind="synchronisation" x="-238" y="-51">i_robot_4!</label>
+			<label kind="assignment" x="-153" y="-51">cl=0</label>
+		</transition>
+	</template>
+	<template>
+		<name>Responder1</name>
+		<declaration>// This template is needed just for communication with TRON
+</declaration>
+		<location id="id104" x="0" y="0">
+		</location>
+		<init ref="id104"/>
+		<transition>
+			<source ref="id104"/>
+			<target ref="id104"/>
+			<label kind="synchronisation" x="-59" y="51">o_robot_1_response!</label>
+			<nail x="25" y="51"/>
+			<nail x="-25" y="51"/>
+		</transition>
+		<transition>
+			<source ref="id104"/>
+			<target ref="id104"/>
+			<label kind="synchronisation" x="-34" y="-76">i_robot_1?</label>
+			<nail x="-25" y="-51"/>
+			<nail x="25" y="-51"/>
+		</transition>
+	</template>
+	<template>
+		<name>Responder2</name>
+		<declaration>// This template is needed just for communication with TRON
+</declaration>
+		<location id="id105" x="0" y="0">
+		</location>
+		<init ref="id105"/>
+		<transition>
+			<source ref="id105"/>
+			<target ref="id105"/>
+			<label kind="synchronisation" x="-59" y="51">o_robot_2_response!</label>
+			<nail x="25" y="51"/>
+			<nail x="-25" y="51"/>
+		</transition>
+		<transition>
+			<source ref="id105"/>
+			<target ref="id105"/>
+			<label kind="synchronisation" x="-34" y="-76">i_robot_2?</label>
+			<nail x="-25" y="-51"/>
+			<nail x="25" y="-51"/>
+		</transition>
+	</template>
+	<template>
+		<name>Responder3</name>
+		<declaration>// This template is needed just for communication with TRON
+</declaration>
+		<location id="id106" x="0" y="0">
+		</location>
+		<init ref="id106"/>
+		<transition>
+			<source ref="id106"/>
+			<target ref="id106"/>
+			<label kind="synchronisation" x="-59" y="51">o_robot_3_response!</label>
+			<nail x="25" y="51"/>
+			<nail x="-25" y="51"/>
+		</transition>
+		<transition>
+			<source ref="id106"/>
+			<target ref="id106"/>
+			<label kind="synchronisation" x="-34" y="-76">i_robot_3?</label>
+			<nail x="-25" y="-51"/>
+			<nail x="25" y="-51"/>
+		</transition>
+	</template>
+	<template>
+		<name>Responder4</name>
+		<declaration>// This template is needed just for communication with TRON
+</declaration>
+		<location id="id107" x="0" y="0">
+		</location>
+		<init ref="id107"/>
+		<transition>
+			<source ref="id107"/>
+			<target ref="id107"/>
+			<label kind="synchronisation" x="-59" y="51">o_robot_4_response!</label>
+			<nail x="25" y="51"/>
+			<nail x="-25" y="51"/>
+		</transition>
+		<transition>
+			<source ref="id107"/>
+			<target ref="id107"/>
+			<label kind="synchronisation" x="-34" y="-76">i_robot_4?</label>
+			<nail x="-25" y="-51"/>
+			<nail x="25" y="-51"/>
+		</transition>
+	</template>
+	<template>
+		<name x="5" y="5">NRobot1_Pos</name>
+		<declaration>// Place local declarations here.
+const id_t id=1;</declaration>
+		<location id="id108" x="-510" y="298">
+			<name x="-520" y="264">n8</name>
+		</location>
+		<location id="id109" x="-297" y="298">
+			<name x="-280" y="289">n7</name>
+		</location>
+		<location id="id110" x="-68" y="306">
+			<name x="-78" y="272">n12</name>
+		</location>
+		<location id="id111" x="119" y="306">
+			<name x="127" y="298">n11</name>
+		</location>
+		<location id="id112" x="492" y="306">
+			<name x="482" y="272">n15</name>
+		</location>
+		<location id="id113" x="331" y="306">
+			<name x="288" y="298">n14</name>
+		</location>
+		<location id="id114" x="492" y="-17">
+			<name x="482" y="-51">n18</name>
+		</location>
+		<location id="id115" x="331" y="-170">
+			<name x="321" y="-204">n17</name>
+		</location>
+		<location id="id116" x="331" y="-17">
+			<name x="321" y="-51">n16</name>
+		</location>
+		<location id="id117" x="331" y="136">
+			<name x="348" y="119">n13</name>
+		</location>
+		<location id="id118" x="119" y="136">
+			<name x="109" y="102">n10</name>
+		</location>
+		<location id="id119" x="-68" y="-34">
+			<name x="-78" y="-68">n9</name>
+		</location>
+		<location id="id120" x="-68" y="136">
+			<name x="-102" y="111">n6</name>
+		</location>
+		<location id="id121" x="-297" y="136">
+			<name x="-331" y="119">n5</name>
+		</location>
+		<location id="id122" x="-501" y="136">
+			<name x="-510" y="145">n4</name>
+		</location>
+		<location id="id123" x="-501" y="-34">
+			<name x="-511" y="-68">n3</name>
+		</location>
+		<location id="id124" x="-297" y="-34">
+			<name x="-323" y="-76">n2</name>
+		</location>
+		<location id="id125" x="-297" y="-187">
+			<name x="-307" y="-221">n1</name>
+		</location>
+		<init ref="id125"/>
+		<transition>
+			<source ref="id111"/>
+			<target ref="id118"/>
+			<label kind="guard" x="127" y="255">NextNode[id]==10</label>
+			<label kind="synchronisation" x="144" y="272">chR[id]?</label>
+			<label kind="comments" x="186" y="238">20</label>
+			<nail x="161" y="221"/>
+		</transition>
+		<transition>
+			<source ref="id115"/>
+			<target ref="id116"/>
+			<label kind="guard" x="195" y="-153">NextNode[id]==16</label>
+			<label kind="synchronisation" x="195" y="-127">chR[id]?</label>
+			<label kind="comments" x="254" y="-110">27</label>
+			<nail x="288" y="-85"/>
+		</transition>
+		<transition>
+			<source ref="id114"/>
+			<target ref="id116"/>
+			<label kind="guard" x="424" y="0">NextNode[id]==16</label>
+			<label kind="synchronisation" x="365" y="0">chR[id]?</label>
+			<label kind="comments" x="415" y="25">29</label>
+			<nail x="406" y="4"/>
+		</transition>
+		<transition>
+			<source ref="id116"/>
+			<target ref="id117"/>
+			<label kind="guard" x="195" y="0">NextNode[id]==13</label>
+			<label kind="synchronisation" x="212" y="17">chR[id]?</label>
+			<label kind="comments" x="280" y="34">25</label>
+			<nail x="297" y="68"/>
+		</transition>
+		<transition>
+			<source ref="id119"/>
+			<target ref="id120"/>
+			<label kind="guard" x="-195" y="-8">NextNode[id]==6</label>
+			<label kind="synchronisation" x="-153" y="8">chR[id]?</label>
+			<label kind="comments" x="-127" y="-34">15</label>
+			<nail x="-93" y="34"/>
+		</transition>
+		<transition>
+			<source ref="id120"/>
+			<target ref="id121"/>
+			<label kind="guard" x="-272" y="170">NextNode[id]==5</label>
+			<label kind="synchronisation" x="-272" y="153">chR[id]?</label>
+			<label kind="comments" x="-153" y="170">13</label>
+			<nail x="-187" y="161"/>
+		</transition>
+		<transition>
+			<source ref="id118"/>
+			<target ref="id120"/>
+			<label kind="guard" x="-68" y="153">NextNode[id]==6</label>
+			<label kind="synchronisation" x="-68" y="170">chR[id]?</label>
+			<label kind="comments" x="-9" y="178">17</label>
+			<nail x="43" y="170"/>
+		</transition>
+		<transition>
+			<source ref="id117"/>
+			<target ref="id118"/>
+			<label kind="guard" x="153" y="161">NextNode[id]==10</label>
+			<label kind="synchronisation" x="153" y="145">chR[id]?</label>
+			<label kind="comments" x="280" y="153">23</label>
+			<nail x="246" y="153"/>
+		</transition>
+		<transition>
+			<source ref="id113"/>
+			<target ref="id117"/>
+			<label kind="guard" x="374" y="213">NextNode[id]==13</label>
+			<label kind="synchronisation" x="407" y="179">chR[id]?</label>
+			<label kind="comments" x="382" y="179">32</label>
+			<nail x="382" y="230"/>
+		</transition>
+		<transition>
+			<source ref="id112"/>
+			<target ref="id113"/>
+			<label kind="guard" x="399" y="331">NextNode[id]==14</label>
+			<label kind="synchronisation" x="297" y="331">chR[id]?</label>
+			<label kind="comments" x="356" y="331">33</label>
+			<nail x="416" y="331"/>
+		</transition>
+		<transition>
+			<source ref="id109"/>
+			<target ref="id121"/>
+			<label kind="guard" x="-433" y="187">NextNode[id]==5</label>
+			<label kind="synchronisation" x="-408" y="170">chR[id]?</label>
+			<label kind="comments" x="-374" y="213">10</label>
+			<nail x="-331" y="196"/>
+		</transition>
+		<transition>
+			<source ref="id108"/>
+			<target ref="id109"/>
+			<label kind="guard" x="-399" y="331">NextNode[id]==7</label>
+			<label kind="synchronisation" x="-510" y="323">chR[id]?</label>
+			<label kind="comments" x="-450" y="331">12</label>
+			<nail x="-391" y="332"/>
+		</transition>
+		<transition>
+			<source ref="id121"/>
+			<target ref="id124"/>
+			<label kind="guard" x="-425" y="25">NextNode[id]==2</label>
+			<label kind="synchronisation" x="-391" y="42">chR[id]?</label>
+			<label kind="comments" x="-340" y="111">8</label>
+			<nail x="-323" y="59"/>
+		</transition>
+		<transition>
+			<source ref="id124"/>
+			<target ref="id125"/>
+			<label kind="guard" x="-255" y="-85">NextNode[id]==1</label>
+			<label kind="synchronisation" x="-255" y="-110">chR[id]?</label>
+			<label kind="comments" x="-255" y="-136">2</label>
+			<nail x="-272" y="-110"/>
+		</transition>
+		<transition>
+			<source ref="id123"/>
+			<target ref="id124"/>
+			<label kind="guard" x="-484" y="-68">NextNode[id]==2</label>
+			<label kind="synchronisation" x="-494" y="-85">chR[id]?</label>
+			<label kind="comments" x="-365" y="-76">4</label>
+			<nail x="-400" y="-51"/>
+		</transition>
+		<transition>
+			<source ref="id120"/>
+			<target ref="id118"/>
+			<label kind="guard" x="-51" y="111">NextNode[id]==10</label>
+			<label kind="synchronisation" x="-51" y="94">chR[id]?</label>
+			<label kind="comments" x="76" y="94">18</label>
+		</transition>
+		<transition>
+			<source ref="id121"/>
+			<target ref="id120"/>
+			<label kind="guard" x="-255" y="94">NextNode[id]==6</label>
+			<label kind="synchronisation" x="-272" y="110">chR[id]?</label>
+		</transition>
+		<transition>
+			<source ref="id122"/>
+			<target ref="id123"/>
+			<label kind="guard" x="-637" y="8">NextNode[id]==3</label>
+			<label kind="synchronisation" x="-603" y="25">chR[id]?</label>
+			<label kind="comments" x="-561" y="59">6</label>
+			<nail x="-518" y="51"/>
+		</transition>
+		<transition>
+			<source ref="id110"/>
+			<target ref="id111"/>
+			<label kind="guard" x="-34" y="331">NextNode[id]==11</label>
+			<label kind="synchronisation" x="85" y="331">chR[id]?</label>
+			<label kind="comments" x="-68" y="331">22</label>
+			<nail x="43" y="331"/>
+		</transition>
+		<transition>
+			<source ref="id111"/>
+			<target ref="id110"/>
+			<label kind="guard" x="-42" y="272">NextNode[id]==12</label>
+			<label kind="synchronisation" x="-17" y="255">chR[id]?</label>
+			<label kind="comments" x="-42" y="246">21</label>
+		</transition>
+		<transition>
+			<source ref="id118"/>
+			<target ref="id111"/>
+			<label kind="guard" x="42" y="204">NextNode[id]==11</label>
+			<label kind="synchronisation" x="43" y="187">chR[id]?</label>
+			<label kind="comments" x="93" y="229">19</label>
+		</transition>
+		<transition>
+			<source ref="id113"/>
+			<target ref="id112"/>
+			<label kind="guard" x="356" y="272">NextNode[id]==15</label>
+			<label kind="synchronisation" x="365" y="289">chR[id]?</label>
+			<label kind="comments" x="448" y="281">34</label>
+		</transition>
+		<transition>
+			<source ref="id117"/>
+			<target ref="id113"/>
+			<label kind="guard" x="229" y="204">NextNode[id]==14</label>
+			<label kind="synchronisation" x="237" y="221">chR[id]?</label>
+			<label kind="comments" x="297" y="221">31</label>
+		</transition>
+		<transition>
+			<source ref="id116"/>
+			<target ref="id114"/>
+			<label kind="guard" x="349" y="-51">NextNode[id]==18</label>
+			<label kind="synchronisation" x="349" y="-34">chR[id]?</label>
+			<label kind="comments" x="441" y="-68">30</label>
+		</transition>
+		<transition>
+			<source ref="id116"/>
+			<target ref="id115"/>
+			<label kind="guard" x="331" y="-127">NextNode[id]==17</label>
+			<label kind="synchronisation" x="331" y="-110">chR[id]?</label>
+			<label kind="comments" x="339" y="-85">28</label>
+		</transition>
+		<transition>
+			<source ref="id117"/>
+			<target ref="id116"/>
+			<label kind="guard" x="365" y="68">NextNode[id]==16</label>
+			<label kind="synchronisation" x="331" y="42">chR[id]?</label>
+			<label kind="comments" x="331" y="71">26</label>
+		</transition>
+		<transition>
+			<source ref="id118"/>
+			<target ref="id117"/>
+			<label kind="guard" x="144" y="85">NextNode[id]==13</label>
+			<label kind="synchronisation" x="153" y="110">chR[id]?</label>
+			<label kind="comments" x="229" y="111">24</label>
+		</transition>
+		<transition>
+			<source ref="id120"/>
+			<target ref="id119"/>
+			<label kind="guard" x="-59" y="0">NextNode[id]==9</label>
+			<label kind="synchronisation" x="-59" y="-17">chR[id]?</label>
+			<label kind="comments" x="-51" y="25">16</label>
+		</transition>
+		<transition>
+			<source ref="id121"/>
+			<target ref="id120"/>
+			<label kind="comments" x="-161" y="110">14</label>
+		</transition>
+		<transition>
+			<source ref="id109"/>
+			<target ref="id108"/>
+			<label kind="guard" x="-459" y="272">NextNode[id]==8</label>
+			<label kind="synchronisation" x="-459" y="255">chR[id]?</label>
+			<label kind="comments" x="-484" y="272">11</label>
+		</transition>
+		<transition>
+			<source ref="id121"/>
+			<target ref="id109"/>
+			<label kind="guard" x="-289" y="221">NextNode[id]==7</label>
+			<label kind="synchronisation" x="-289" y="246">chR[id]?</label>
+			<label kind="comments" x="-229" y="246">9</label>
+		</transition>
+		<transition>
+			<source ref="id124"/>
+			<target ref="id121"/>
+			<label kind="guard" x="-297" y="34">NextNode[id]==5</label>
+			<label kind="synchronisation" x="-297" y="17">chR[id]?</label>
+			<label kind="comments" x="-289" y="68">7</label>
+		</transition>
+		<transition>
+			<source ref="id123"/>
+			<target ref="id122"/>
+			<label kind="guard" x="-484" y="111">NextNode[id]==4</label>
+			<label kind="synchronisation" x="-501" y="38">chR[id]?</label>
+			<label kind="comments" x="-484" y="68">5</label>
+		</transition>
+		<transition>
+			<source ref="id124"/>
+			<target ref="id123"/>
+			<label kind="guard" x="-433" y="-8">NextNode[id]==3</label>
+			<label kind="synchronisation" x="-391" y="-25">chR[id]?</label>
+			<label kind="comments" x="-459" y="-25">3</label>
+		</transition>
+		<transition>
+			<source ref="id125"/>
+			<target ref="id124"/>
+			<label kind="guard" x="-425" y="-144">NextNode[id]==2</label>
+			<label kind="synchronisation" x="-399" y="-170">chR[id]?</label>
+			<label kind="comments" x="-323" y="-170">1</label>
+		</transition>
+	</template>
+	<template>
+		<name x="5" y="5">NRobot2_Pos</name>
+		<declaration>// Place local declarations here.
+const id_t id=2;</declaration>
+		<location id="id126" x="-510" y="298">
+			<name x="-520" y="264">n8</name>
+		</location>
+		<location id="id127" x="-297" y="298">
+			<name x="-280" y="289">n7</name>
+		</location>
+		<location id="id128" x="-68" y="306">
+			<name x="-78" y="272">n12</name>
+		</location>
+		<location id="id129" x="119" y="306">
+			<name x="127" y="298">n11</name>
+		</location>
+		<location id="id130" x="492" y="306">
+			<name x="482" y="272">n15</name>
+		</location>
+		<location id="id131" x="331" y="306">
+			<name x="288" y="298">n14</name>
+		</location>
+		<location id="id132" x="492" y="-17">
+			<name x="482" y="-51">n18</name>
+		</location>
+		<location id="id133" x="331" y="-170">
+			<name x="321" y="-204">n17</name>
+		</location>
+		<location id="id134" x="331" y="-17">
+			<name x="321" y="-51">n16</name>
+		</location>
+		<location id="id135" x="331" y="136">
+			<name x="348" y="119">n13</name>
+		</location>
+		<location id="id136" x="119" y="136">
+			<name x="109" y="102">n10</name>
+		</location>
+		<location id="id137" x="-68" y="-34">
+			<name x="-78" y="-68">n9</name>
+		</location>
+		<location id="id138" x="-68" y="136">
+			<name x="-102" y="111">n6</name>
+		</location>
+		<location id="id139" x="-297" y="136">
+			<name x="-331" y="119">n5</name>
+		</location>
+		<location id="id140" x="-501" y="136">
+			<name x="-510" y="145">n4</name>
+		</location>
+		<location id="id141" x="-501" y="-34">
+			<name x="-511" y="-68">n3</name>
+		</location>
+		<location id="id142" x="-297" y="-34">
+			<name x="-323" y="-76">n2</name>
+		</location>
+		<location id="id143" x="-297" y="-187">
+			<name x="-307" y="-221">n1</name>
+		</location>
+		<init ref="id126"/>
+		<transition>
+			<source ref="id129"/>
+			<target ref="id136"/>
+			<label kind="guard" x="127" y="255">NextNode[id]==10</label>
+			<label kind="synchronisation" x="144" y="272">chR[id]?</label>
+			<label kind="comments" x="186" y="238">20</label>
+			<nail x="161" y="221"/>
+		</transition>
+		<transition>
+			<source ref="id133"/>
+			<target ref="id134"/>
+			<label kind="guard" x="195" y="-153">NextNode[id]==16</label>
+			<label kind="synchronisation" x="195" y="-127">chR[id]?</label>
+			<label kind="comments" x="254" y="-110">27</label>
+			<nail x="288" y="-85"/>
+		</transition>
+		<transition>
+			<source ref="id132"/>
+			<target ref="id134"/>
+			<label kind="guard" x="424" y="0">NextNode[id]==16</label>
+			<label kind="synchronisation" x="365" y="0">chR[id]?</label>
+			<label kind="comments" x="415" y="25">29</label>
+			<nail x="406" y="4"/>
+		</transition>
+		<transition>
+			<source ref="id134"/>
+			<target ref="id135"/>
+			<label kind="guard" x="195" y="0">NextNode[id]==13</label>
+			<label kind="synchronisation" x="212" y="17">chR[id]?</label>
+			<label kind="comments" x="280" y="34">25</label>
+			<nail x="297" y="68"/>
+		</transition>
+		<transition>
+			<source ref="id137"/>
+			<target ref="id138"/>
+			<label kind="guard" x="-195" y="-8">NextNode[id]==6</label>
+			<label kind="synchronisation" x="-153" y="8">chR[id]?</label>
+			<label kind="comments" x="-127" y="-34">15</label>
+			<nail x="-93" y="34"/>
+		</transition>
+		<transition>
+			<source ref="id138"/>
+			<target ref="id139"/>
+			<label kind="guard" x="-272" y="170">NextNode[id]==5</label>
+			<label kind="synchronisation" x="-272" y="153">chR[id]?</label>
+			<label kind="comments" x="-153" y="170">13</label>
+			<nail x="-187" y="161"/>
+		</transition>
+		<transition>
+			<source ref="id136"/>
+			<target ref="id138"/>
+			<label kind="guard" x="-68" y="153">NextNode[id]==6</label>
+			<label kind="synchronisation" x="-68" y="170">chR[id]?</label>
+			<label kind="comments" x="-9" y="178">17</label>
+			<nail x="43" y="170"/>
+		</transition>
+		<transition>
+			<source ref="id135"/>
+			<target ref="id136"/>
+			<label kind="guard" x="153" y="161">NextNode[id]==10</label>
+			<label kind="synchronisation" x="153" y="145">chR[id]?</label>
+			<label kind="comments" x="280" y="153">23</label>
+			<nail x="246" y="153"/>
+		</transition>
+		<transition>
+			<source ref="id131"/>
+			<target ref="id135"/>
+			<label kind="guard" x="374" y="213">NextNode[id]==13</label>
+			<label kind="synchronisation" x="407" y="179">chR[id]?</label>
+			<label kind="comments" x="382" y="179">32</label>
+			<nail x="382" y="230"/>
+		</transition>
+		<transition>
+			<source ref="id130"/>
+			<target ref="id131"/>
+			<label kind="guard" x="399" y="331">NextNode[id]==14</label>
+			<label kind="synchronisation" x="297" y="331">chR[id]?</label>
+			<label kind="comments" x="356" y="331">33</label>
+			<nail x="416" y="331"/>
+		</transition>
+		<transition>
+			<source ref="id127"/>
+			<target ref="id139"/>
+			<label kind="guard" x="-433" y="187">NextNode[id]==5</label>
+			<label kind="synchronisation" x="-408" y="170">chR[id]?</label>
+			<label kind="comments" x="-374" y="213">10</label>
+			<nail x="-331" y="196"/>
+		</transition>
+		<transition>
+			<source ref="id126"/>
+			<target ref="id127"/>
+			<label kind="guard" x="-399" y="331">NextNode[id]==7</label>
+			<label kind="synchronisation" x="-510" y="323">chR[id]?</label>
+			<label kind="comments" x="-450" y="331">12</label>
+			<nail x="-391" y="332"/>
+		</transition>
+		<transition>
+			<source ref="id139"/>
+			<target ref="id142"/>
+			<label kind="guard" x="-425" y="25">NextNode[id]==2</label>
+			<label kind="synchronisation" x="-391" y="42">chR[id]?</label>
+			<label kind="comments" x="-340" y="111">8</label>
+			<nail x="-323" y="59"/>
+		</transition>
+		<transition>
+			<source ref="id142"/>
+			<target ref="id143"/>
+			<label kind="guard" x="-255" y="-85">NextNode[id]==1</label>
+			<label kind="synchronisation" x="-255" y="-110">chR[id]?</label>
+			<label kind="comments" x="-255" y="-136">2</label>
+			<nail x="-272" y="-110"/>
+		</transition>
+		<transition>
+			<source ref="id141"/>
+			<target ref="id142"/>
+			<label kind="guard" x="-484" y="-68">NextNode[id]==2</label>
+			<label kind="synchronisation" x="-494" y="-85">chR[id]?</label>
+			<label kind="comments" x="-365" y="-76">4</label>
+			<nail x="-400" y="-51"/>
+		</transition>
+		<transition>
+			<source ref="id138"/>
+			<target ref="id136"/>
+			<label kind="guard" x="-51" y="111">NextNode[id]==10</label>
+			<label kind="synchronisation" x="-51" y="94">chR[id]?</label>
+			<label kind="comments" x="76" y="94">18</label>
+		</transition>
+		<transition>
+			<source ref="id139"/>
+			<target ref="id138"/>
+			<label kind="guard" x="-255" y="94">NextNode[id]==6</label>
+			<label kind="synchronisation" x="-272" y="110">chR[id]?</label>
+		</transition>
+		<transition>
+			<source ref="id140"/>
+			<target ref="id141"/>
+			<label kind="guard" x="-637" y="8">NextNode[id]==3</label>
+			<label kind="synchronisation" x="-603" y="25">chR[id]?</label>
+			<label kind="comments" x="-561" y="59">6</label>
+			<nail x="-518" y="51"/>
+		</transition>
+		<transition>
+			<source ref="id128"/>
+			<target ref="id129"/>
+			<label kind="guard" x="-34" y="331">NextNode[id]==11</label>
+			<label kind="synchronisation" x="85" y="331">chR[id]?</label>
+			<label kind="comments" x="-68" y="331">22</label>
+			<nail x="43" y="331"/>
+		</transition>
+		<transition>
+			<source ref="id129"/>
+			<target ref="id128"/>
+			<label kind="guard" x="-42" y="272">NextNode[id]==12</label>
+			<label kind="synchronisation" x="-17" y="255">chR[id]?</label>
+			<label kind="comments" x="-42" y="246">21</label>
+		</transition>
+		<transition>
+			<source ref="id136"/>
+			<target ref="id129"/>
+			<label kind="guard" x="42" y="204">NextNode[id]==11</label>
+			<label kind="synchronisation" x="43" y="187">chR[id]?</label>
+			<label kind="comments" x="93" y="229">19</label>
+		</transition>
+		<transition>
+			<source ref="id131"/>
+			<target ref="id130"/>
+			<label kind="guard" x="356" y="272">NextNode[id]==15</label>
+			<label kind="synchronisation" x="365" y="289">chR[id]?</label>
+			<label kind="comments" x="448" y="281">34</label>
+		</transition>
+		<transition>
+			<source ref="id135"/>
+			<target ref="id131"/>
+			<label kind="guard" x="229" y="204">NextNode[id]==14</label>
+			<label kind="synchronisation" x="237" y="221">chR[id]?</label>
+			<label kind="comments" x="297" y="221">31</label>
+		</transition>
+		<transition>
+			<source ref="id134"/>
+			<target ref="id132"/>
+			<label kind="guard" x="349" y="-51">NextNode[id]==18</label>
+			<label kind="synchronisation" x="349" y="-34">chR[id]?</label>
+			<label kind="comments" x="441" y="-68">30</label>
+		</transition>
+		<transition>
+			<source ref="id134"/>
+			<target ref="id133"/>
+			<label kind="guard" x="331" y="-127">NextNode[id]==17</label>
+			<label kind="synchronisation" x="331" y="-110">chR[id]?</label>
+			<label kind="comments" x="339" y="-85">28</label>
+		</transition>
+		<transition>
+			<source ref="id135"/>
+			<target ref="id134"/>
+			<label kind="guard" x="365" y="68">NextNode[id]==16</label>
+			<label kind="synchronisation" x="331" y="42">chR[id]?</label>
+			<label kind="comments" x="331" y="71">26</label>
+		</transition>
+		<transition>
+			<source ref="id136"/>
+			<target ref="id135"/>
+			<label kind="guard" x="144" y="85">NextNode[id]==13</label>
+			<label kind="synchronisation" x="153" y="110">chR[id]?</label>
+			<label kind="comments" x="229" y="111">24</label>
+		</transition>
+		<transition>
+			<source ref="id138"/>
+			<target ref="id137"/>
+			<label kind="guard" x="-59" y="0">NextNode[id]==9</label>
+			<label kind="synchronisation" x="-59" y="-17">chR[id]?</label>
+			<label kind="comments" x="-51" y="25">16</label>
+		</transition>
+		<transition>
+			<source ref="id139"/>
+			<target ref="id138"/>
+			<label kind="comments" x="-161" y="110">14</label>
+		</transition>
+		<transition>
+			<source ref="id127"/>
+			<target ref="id126"/>
+			<label kind="guard" x="-459" y="272">NextNode[id]==8</label>
+			<label kind="synchronisation" x="-459" y="255">chR[id]?</label>
+			<label kind="comments" x="-484" y="272">11</label>
+		</transition>
+		<transition>
+			<source ref="id139"/>
+			<target ref="id127"/>
+			<label kind="guard" x="-289" y="221">NextNode[id]==7</label>
+			<label kind="synchronisation" x="-289" y="246">chR[id]?</label>
+			<label kind="comments" x="-229" y="246">9</label>
+		</transition>
+		<transition>
+			<source ref="id142"/>
+			<target ref="id139"/>
+			<label kind="guard" x="-297" y="34">NextNode[id]==5</label>
+			<label kind="synchronisation" x="-297" y="17">chR[id]?</label>
+			<label kind="comments" x="-289" y="68">7</label>
+		</transition>
+		<transition>
+			<source ref="id141"/>
+			<target ref="id140"/>
+			<label kind="guard" x="-484" y="111">NextNode[id]==4</label>
+			<label kind="synchronisation" x="-501" y="38">chR[id]?</label>
+			<label kind="comments" x="-484" y="68">5</label>
+		</transition>
+		<transition>
+			<source ref="id142"/>
+			<target ref="id141"/>
+			<label kind="guard" x="-433" y="-8">NextNode[id]==3</label>
+			<label kind="synchronisation" x="-391" y="-25">chR[id]?</label>
+			<label kind="comments" x="-459" y="-25">3</label>
+		</transition>
+		<transition>
+			<source ref="id143"/>
+			<target ref="id142"/>
+			<label kind="guard" x="-425" y="-144">NextNode[id]==2</label>
+			<label kind="synchronisation" x="-399" y="-170">chR[id]?</label>
+			<label kind="comments" x="-323" y="-170">1</label>
+		</transition>
+	</template>
+	<template>
+		<name x="5" y="5">NRobot3_Pos</name>
+		<declaration>// Place local declarations here.
+const id_t id=3;</declaration>
+		<location id="id144" x="-510" y="298">
+			<name x="-520" y="264">n8</name>
+		</location>
+		<location id="id145" x="-297" y="298">
+			<name x="-280" y="289">n7</name>
+		</location>
+		<location id="id146" x="-68" y="306">
+			<name x="-78" y="272">n12</name>
+		</location>
+		<location id="id147" x="119" y="306">
+			<name x="127" y="298">n11</name>
+		</location>
+		<location id="id148" x="492" y="306">
+			<name x="482" y="272">n15</name>
+		</location>
+		<location id="id149" x="331" y="306">
+			<name x="288" y="298">n14</name>
+		</location>
+		<location id="id150" x="492" y="-17">
+			<name x="482" y="-51">n18</name>
+		</location>
+		<location id="id151" x="331" y="-170">
+			<name x="321" y="-204">n17</name>
+		</location>
+		<location id="id152" x="331" y="-17">
+			<name x="321" y="-51">n16</name>
+		</location>
+		<location id="id153" x="331" y="136">
+			<name x="348" y="119">n13</name>
+		</location>
+		<location id="id154" x="119" y="136">
+			<name x="109" y="102">n10</name>
+		</location>
+		<location id="id155" x="-68" y="-34">
+			<name x="-78" y="-68">n9</name>
+		</location>
+		<location id="id156" x="-68" y="136">
+			<name x="-102" y="111">n6</name>
+		</location>
+		<location id="id157" x="-297" y="136">
+			<name x="-331" y="119">n5</name>
+		</location>
+		<location id="id158" x="-501" y="136">
+			<name x="-510" y="145">n4</name>
+		</location>
+		<location id="id159" x="-501" y="-34">
+			<name x="-511" y="-68">n3</name>
+		</location>
+		<location id="id160" x="-297" y="-34">
+			<name x="-323" y="-76">n2</name>
+		</location>
+		<location id="id161" x="-297" y="-187">
+			<name x="-307" y="-221">n1</name>
+		</location>
+		<init ref="id151"/>
+		<transition>
+			<source ref="id147"/>
+			<target ref="id154"/>
+			<label kind="guard" x="127" y="255">NextNode[id]==10</label>
+			<label kind="synchronisation" x="144" y="272">chR[id]?</label>
+			<label kind="comments" x="186" y="238">20</label>
+			<nail x="161" y="221"/>
+		</transition>
+		<transition>
+			<source ref="id151"/>
+			<target ref="id152"/>
+			<label kind="guard" x="195" y="-153">NextNode[id]==16</label>
+			<label kind="synchronisation" x="195" y="-127">chR[id]?</label>
+			<label kind="comments" x="254" y="-110">27</label>
+			<nail x="288" y="-85"/>
+		</transition>
+		<transition>
+			<source ref="id150"/>
+			<target ref="id152"/>
+			<label kind="guard" x="424" y="0">NextNode[id]==16</label>
+			<label kind="synchronisation" x="365" y="0">chR[id]?</label>
+			<label kind="comments" x="415" y="25">29</label>
+			<nail x="406" y="4"/>
+		</transition>
+		<transition>
+			<source ref="id152"/>
+			<target ref="id153"/>
+			<label kind="guard" x="195" y="0">NextNode[id]==13</label>
+			<label kind="synchronisation" x="212" y="17">chR[id]?</label>
+			<label kind="comments" x="280" y="34">25</label>
+			<nail x="297" y="68"/>
+		</transition>
+		<transition>
+			<source ref="id155"/>
+			<target ref="id156"/>
+			<label kind="guard" x="-195" y="-8">NextNode[id]==6</label>
+			<label kind="synchronisation" x="-153" y="8">chR[id]?</label>
+			<label kind="comments" x="-127" y="-34">15</label>
+			<nail x="-93" y="34"/>
+		</transition>
+		<transition>
+			<source ref="id156"/>
+			<target ref="id157"/>
+			<label kind="guard" x="-272" y="170">NextNode[id]==5</label>
+			<label kind="synchronisation" x="-272" y="153">chR[id]?</label>
+			<label kind="comments" x="-153" y="170">13</label>
+			<nail x="-187" y="161"/>
+		</transition>
+		<transition>
+			<source ref="id154"/>
+			<target ref="id156"/>
+			<label kind="guard" x="-68" y="153">NextNode[id]==6</label>
+			<label kind="synchronisation" x="-68" y="170">chR[id]?</label>
+			<label kind="comments" x="-9" y="178">17</label>
+			<nail x="43" y="170"/>
+		</transition>
+		<transition>
+			<source ref="id153"/>
+			<target ref="id154"/>
+			<label kind="guard" x="153" y="161">NextNode[id]==10</label>
+			<label kind="synchronisation" x="153" y="145">chR[id]?</label>
+			<label kind="comments" x="280" y="153">23</label>
+			<nail x="246" y="153"/>
+		</transition>
+		<transition>
+			<source ref="id149"/>
+			<target ref="id153"/>
+			<label kind="guard" x="374" y="213">NextNode[id]==13</label>
+			<label kind="synchronisation" x="407" y="179">chR[id]?</label>
+			<label kind="comments" x="382" y="179">32</label>
+			<nail x="382" y="230"/>
+		</transition>
+		<transition>
+			<source ref="id148"/>
+			<target ref="id149"/>
+			<label kind="guard" x="399" y="331">NextNode[id]==14</label>
+			<label kind="synchronisation" x="297" y="331">chR[id]?</label>
+			<label kind="comments" x="356" y="331">33</label>
+			<nail x="416" y="331"/>
+		</transition>
+		<transition>
+			<source ref="id145"/>
+			<target ref="id157"/>
+			<label kind="guard" x="-433" y="187">NextNode[id]==5</label>
+			<label kind="synchronisation" x="-408" y="170">chR[id]?</label>
+			<label kind="comments" x="-374" y="213">10</label>
+			<nail x="-331" y="196"/>
+		</transition>
+		<transition>
+			<source ref="id144"/>
+			<target ref="id145"/>
+			<label kind="guard" x="-399" y="331">NextNode[id]==7</label>
+			<label kind="synchronisation" x="-510" y="323">chR[id]?</label>
+			<label kind="comments" x="-450" y="331">12</label>
+			<nail x="-391" y="332"/>
+		</transition>
+		<transition>
+			<source ref="id157"/>
+			<target ref="id160"/>
+			<label kind="guard" x="-425" y="25">NextNode[id]==2</label>
+			<label kind="synchronisation" x="-391" y="42">chR[id]?</label>
+			<label kind="comments" x="-340" y="111">8</label>
+			<nail x="-323" y="59"/>
+		</transition>
+		<transition>
+			<source ref="id160"/>
+			<target ref="id161"/>
+			<label kind="guard" x="-255" y="-85">NextNode[id]==1</label>
+			<label kind="synchronisation" x="-255" y="-110">chR[id]?</label>
+			<label kind="comments" x="-255" y="-136">2</label>
+			<nail x="-272" y="-110"/>
+		</transition>
+		<transition>
+			<source ref="id159"/>
+			<target ref="id160"/>
+			<label kind="guard" x="-484" y="-68">NextNode[id]==2</label>
+			<label kind="synchronisation" x="-494" y="-85">chR[id]?</label>
+			<label kind="comments" x="-365" y="-76">4</label>
+			<nail x="-400" y="-51"/>
+		</transition>
+		<transition>
+			<source ref="id156"/>
+			<target ref="id154"/>
+			<label kind="guard" x="-51" y="111">NextNode[id]==10</label>
+			<label kind="synchronisation" x="-51" y="94">chR[id]?</label>
+			<label kind="comments" x="76" y="94">18</label>
+		</transition>
+		<transition>
+			<source ref="id157"/>
+			<target ref="id156"/>
+			<label kind="guard" x="-255" y="94">NextNode[id]==6</label>
+			<label kind="synchronisation" x="-272" y="110">chR[id]?</label>
+		</transition>
+		<transition>
+			<source ref="id158"/>
+			<target ref="id159"/>
+			<label kind="guard" x="-637" y="8">NextNode[id]==3</label>
+			<label kind="synchronisation" x="-603" y="25">chR[id]?</label>
+			<label kind="comments" x="-561" y="59">6</label>
+			<nail x="-518" y="51"/>
+		</transition>
+		<transition>
+			<source ref="id146"/>
+			<target ref="id147"/>
+			<label kind="guard" x="-34" y="331">NextNode[id]==11</label>
+			<label kind="synchronisation" x="85" y="331">chR[id]?</label>
+			<label kind="comments" x="-68" y="331">22</label>
+			<nail x="43" y="331"/>
+		</transition>
+		<transition>
+			<source ref="id147"/>
+			<target ref="id146"/>
+			<label kind="guard" x="-42" y="272">NextNode[id]==12</label>
+			<label kind="synchronisation" x="-17" y="255">chR[id]?</label>
+			<label kind="comments" x="-42" y="246">21</label>
+		</transition>
+		<transition>
+			<source ref="id154"/>
+			<target ref="id147"/>
+			<label kind="guard" x="42" y="204">NextNode[id]==11</label>
+			<label kind="synchronisation" x="43" y="187">chR[id]?</label>
+			<label kind="comments" x="93" y="229">19</label>
+		</transition>
+		<transition>
+			<source ref="id149"/>
+			<target ref="id148"/>
+			<label kind="guard" x="356" y="272">NextNode[id]==15</label>
+			<label kind="synchronisation" x="365" y="289">chR[id]?</label>
+			<label kind="comments" x="448" y="281">34</label>
+		</transition>
+		<transition>
+			<source ref="id153"/>
+			<target ref="id149"/>
+			<label kind="guard" x="229" y="204">NextNode[id]==14</label>
+			<label kind="synchronisation" x="237" y="221">chR[id]?</label>
+			<label kind="comments" x="297" y="221">31</label>
+		</transition>
+		<transition>
+			<source ref="id152"/>
+			<target ref="id150"/>
+			<label kind="guard" x="349" y="-51">NextNode[id]==18</label>
+			<label kind="synchronisation" x="349" y="-34">chR[id]?</label>
+			<label kind="comments" x="441" y="-68">30</label>
+		</transition>
+		<transition>
+			<source ref="id152"/>
+			<target ref="id151"/>
+			<label kind="guard" x="331" y="-127">NextNode[id]==17</label>
+			<label kind="synchronisation" x="331" y="-110">chR[id]?</label>
+			<label kind="comments" x="339" y="-85">28</label>
+		</transition>
+		<transition>
+			<source ref="id153"/>
+			<target ref="id152"/>
+			<label kind="guard" x="365" y="68">NextNode[id]==16</label>
+			<label kind="synchronisation" x="331" y="42">chR[id]?</label>
+			<label kind="comments" x="331" y="71">26</label>
+		</transition>
+		<transition>
+			<source ref="id154"/>
+			<target ref="id153"/>
+			<label kind="guard" x="144" y="85">NextNode[id]==13</label>
+			<label kind="synchronisation" x="153" y="110">chR[id]?</label>
+			<label kind="comments" x="229" y="111">24</label>
+		</transition>
+		<transition>
+			<source ref="id156"/>
+			<target ref="id155"/>
+			<label kind="guard" x="-59" y="0">NextNode[id]==9</label>
+			<label kind="synchronisation" x="-59" y="-17">chR[id]?</label>
+			<label kind="comments" x="-51" y="25">16</label>
+		</transition>
+		<transition>
+			<source ref="id157"/>
+			<target ref="id156"/>
+			<label kind="comments" x="-161" y="110">14</label>
+		</transition>
+		<transition>
+			<source ref="id145"/>
+			<target ref="id144"/>
+			<label kind="guard" x="-459" y="272">NextNode[id]==8</label>
+			<label kind="synchronisation" x="-459" y="255">chR[id]?</label>
+			<label kind="comments" x="-484" y="272">11</label>
+		</transition>
+		<transition>
+			<source ref="id157"/>
+			<target ref="id145"/>
+			<label kind="guard" x="-289" y="221">NextNode[id]==7</label>
+			<label kind="synchronisation" x="-289" y="246">chR[id]?</label>
+			<label kind="comments" x="-229" y="246">9</label>
+		</transition>
+		<transition>
+			<source ref="id160"/>
+			<target ref="id157"/>
+			<label kind="guard" x="-297" y="34">NextNode[id]==5</label>
+			<label kind="synchronisation" x="-297" y="17">chR[id]?</label>
+			<label kind="comments" x="-289" y="68">7</label>
+		</transition>
+		<transition>
+			<source ref="id159"/>
+			<target ref="id158"/>
+			<label kind="guard" x="-484" y="111">NextNode[id]==4</label>
+			<label kind="synchronisation" x="-501" y="38">chR[id]?</label>
+			<label kind="comments" x="-484" y="68">5</label>
+		</transition>
+		<transition>
+			<source ref="id160"/>
+			<target ref="id159"/>
+			<label kind="guard" x="-433" y="-8">NextNode[id]==3</label>
+			<label kind="synchronisation" x="-391" y="-25">chR[id]?</label>
+			<label kind="comments" x="-459" y="-25">3</label>
+		</transition>
+		<transition>
+			<source ref="id161"/>
+			<target ref="id160"/>
+			<label kind="guard" x="-425" y="-144">NextNode[id]==2</label>
+			<label kind="synchronisation" x="-399" y="-170">chR[id]?</label>
+			<label kind="comments" x="-323" y="-170">1</label>
+		</transition>
+	</template>
+	<template>
+		<name x="5" y="5">NRobot4_Pos</name>
+		<declaration>// Place local declarations here.
+const id_t id=4;</declaration>
+		<location id="id162" x="-510" y="298">
+			<name x="-520" y="264">n8</name>
+		</location>
+		<location id="id163" x="-297" y="298">
+			<name x="-280" y="289">n7</name>
+		</location>
+		<location id="id164" x="-68" y="306">
+			<name x="-78" y="272">n12</name>
+		</location>
+		<location id="id165" x="119" y="306">
+			<name x="127" y="298">n11</name>
+		</location>
+		<location id="id166" x="492" y="306">
+			<name x="482" y="272">n15</name>
+		</location>
+		<location id="id167" x="331" y="306">
+			<name x="288" y="298">n14</name>
+		</location>
+		<location id="id168" x="492" y="-17">
+			<name x="482" y="-51">n18</name>
+		</location>
+		<location id="id169" x="331" y="-170">
+			<name x="321" y="-204">n17</name>
+		</location>
+		<location id="id170" x="331" y="-17">
+			<name x="321" y="-51">n16</name>
+		</location>
+		<location id="id171" x="331" y="136">
+			<name x="348" y="119">n13</name>
+		</location>
+		<location id="id172" x="119" y="136">
+			<name x="109" y="102">n10</name>
+		</location>
+		<location id="id173" x="-68" y="-34">
+			<name x="-78" y="-68">n9</name>
+		</location>
+		<location id="id174" x="-68" y="136">
+			<name x="-102" y="111">n6</name>
+		</location>
+		<location id="id175" x="-297" y="136">
+			<name x="-331" y="119">n5</name>
+		</location>
+		<location id="id176" x="-501" y="136">
+			<name x="-510" y="145">n4</name>
+		</location>
+		<location id="id177" x="-501" y="-34">
+			<name x="-511" y="-68">n3</name>
+		</location>
+		<location id="id178" x="-297" y="-34">
+			<name x="-323" y="-76">n2</name>
+		</location>
+		<location id="id179" x="-297" y="-187">
+			<name x="-307" y="-221">n1</name>
+		</location>
+		<init ref="id166"/>
+		<transition>
+			<source ref="id165"/>
+			<target ref="id172"/>
+			<label kind="guard" x="127" y="255">NextNode[id]==10</label>
+			<label kind="synchronisation" x="144" y="272">chR[id]?</label>
+			<label kind="comments" x="186" y="238">20</label>
+			<nail x="161" y="221"/>
+		</transition>
+		<transition>
+			<source ref="id169"/>
+			<target ref="id170"/>
+			<label kind="guard" x="195" y="-153">NextNode[id]==16</label>
+			<label kind="synchronisation" x="195" y="-127">chR[id]?</label>
+			<label kind="comments" x="254" y="-110">27</label>
+			<nail x="288" y="-85"/>
+		</transition>
+		<transition>
+			<source ref="id168"/>
+			<target ref="id170"/>
+			<label kind="guard" x="424" y="0">NextNode[id]==16</label>
+			<label kind="synchronisation" x="365" y="0">chR[id]?</label>
+			<label kind="comments" x="415" y="25">29</label>
+			<nail x="406" y="4"/>
+		</transition>
+		<transition>
+			<source ref="id170"/>
+			<target ref="id171"/>
+			<label kind="guard" x="195" y="0">NextNode[id]==13</label>
+			<label kind="synchronisation" x="212" y="17">chR[id]?</label>
+			<label kind="comments" x="280" y="34">25</label>
+			<nail x="297" y="68"/>
+		</transition>
+		<transition>
+			<source ref="id173"/>
+			<target ref="id174"/>
+			<label kind="guard" x="-195" y="-8">NextNode[id]==6</label>
+			<label kind="synchronisation" x="-153" y="8">chR[id]?</label>
+			<label kind="comments" x="-127" y="-34">15</label>
+			<nail x="-93" y="34"/>
+		</transition>
+		<transition>
+			<source ref="id174"/>
+			<target ref="id175"/>
+			<label kind="guard" x="-272" y="170">NextNode[id]==5</label>
+			<label kind="synchronisation" x="-272" y="153">chR[id]?</label>
+			<label kind="comments" x="-153" y="170">13</label>
+			<nail x="-187" y="161"/>
+		</transition>
+		<transition>
+			<source ref="id172"/>
+			<target ref="id174"/>
+			<label kind="guard" x="-68" y="153">NextNode[id]==6</label>
+			<label kind="synchronisation" x="-68" y="170">chR[id]?</label>
+			<label kind="comments" x="-9" y="178">17</label>
+			<nail x="43" y="170"/>
+		</transition>
+		<transition>
+			<source ref="id171"/>
+			<target ref="id172"/>
+			<label kind="guard" x="153" y="161">NextNode[id]==10</label>
+			<label kind="synchronisation" x="153" y="145">chR[id]?</label>
+			<label kind="comments" x="280" y="153">23</label>
+			<nail x="246" y="153"/>
+		</transition>
+		<transition>
+			<source ref="id167"/>
+			<target ref="id171"/>
+			<label kind="guard" x="374" y="213">NextNode[id]==13</label>
+			<label kind="synchronisation" x="407" y="179">chR[id]?</label>
+			<label kind="comments" x="382" y="179">32</label>
+			<nail x="382" y="230"/>
+		</transition>
+		<transition>
+			<source ref="id166"/>
+			<target ref="id167"/>
+			<label kind="guard" x="399" y="331">NextNode[id]==14</label>
+			<label kind="synchronisation" x="297" y="331">chR[id]?</label>
+			<label kind="comments" x="356" y="331">33</label>
+			<nail x="416" y="331"/>
+		</transition>
+		<transition>
+			<source ref="id163"/>
+			<target ref="id175"/>
+			<label kind="guard" x="-433" y="187">NextNode[id]==5</label>
+			<label kind="synchronisation" x="-408" y="170">chR[id]?</label>
+			<label kind="comments" x="-374" y="213">10</label>
+			<nail x="-331" y="196"/>
+		</transition>
+		<transition>
+			<source ref="id162"/>
+			<target ref="id163"/>
+			<label kind="guard" x="-399" y="331">NextNode[id]==7</label>
+			<label kind="synchronisation" x="-510" y="323">chR[id]?</label>
+			<label kind="comments" x="-450" y="331">12</label>
+			<nail x="-391" y="332"/>
+		</transition>
+		<transition>
+			<source ref="id175"/>
+			<target ref="id178"/>
+			<label kind="guard" x="-425" y="25">NextNode[id]==2</label>
+			<label kind="synchronisation" x="-391" y="42">chR[id]?</label>
+			<label kind="comments" x="-340" y="111">8</label>
+			<nail x="-323" y="59"/>
+		</transition>
+		<transition>
+			<source ref="id178"/>
+			<target ref="id179"/>
+			<label kind="guard" x="-255" y="-85">NextNode[id]==1</label>
+			<label kind="synchronisation" x="-255" y="-110">chR[id]?</label>
+			<label kind="comments" x="-255" y="-136">2</label>
+			<nail x="-272" y="-110"/>
+		</transition>
+		<transition>
+			<source ref="id177"/>
+			<target ref="id178"/>
+			<label kind="guard" x="-484" y="-68">NextNode[id]==2</label>
+			<label kind="synchronisation" x="-494" y="-85">chR[id]?</label>
+			<label kind="comments" x="-365" y="-76">4</label>
+			<nail x="-400" y="-51"/>
+		</transition>
+		<transition>
+			<source ref="id174"/>
+			<target ref="id172"/>
+			<label kind="guard" x="-51" y="111">NextNode[id]==10</label>
+			<label kind="synchronisation" x="-51" y="94">chR[id]?</label>
+			<label kind="comments" x="76" y="94">18</label>
+		</transition>
+		<transition>
+			<source ref="id175"/>
+			<target ref="id174"/>
+			<label kind="guard" x="-255" y="94">NextNode[id]==6</label>
+			<label kind="synchronisation" x="-272" y="110">chR[id]?</label>
+		</transition>
+		<transition>
+			<source ref="id176"/>
+			<target ref="id177"/>
+			<label kind="guard" x="-637" y="8">NextNode[id]==3</label>
+			<label kind="synchronisation" x="-603" y="25">chR[id]?</label>
+			<label kind="comments" x="-561" y="59">6</label>
+			<nail x="-518" y="51"/>
+		</transition>
+		<transition>
+			<source ref="id164"/>
+			<target ref="id165"/>
+			<label kind="guard" x="-34" y="331">NextNode[id]==11</label>
+			<label kind="synchronisation" x="85" y="331">chR[id]?</label>
+			<label kind="comments" x="-68" y="331">22</label>
+			<nail x="43" y="331"/>
+		</transition>
+		<transition>
+			<source ref="id165"/>
+			<target ref="id164"/>
+			<label kind="guard" x="-42" y="272">NextNode[id]==12</label>
+			<label kind="synchronisation" x="-17" y="255">chR[id]?</label>
+			<label kind="comments" x="-42" y="246">21</label>
+		</transition>
+		<transition>
+			<source ref="id172"/>
+			<target ref="id165"/>
+			<label kind="guard" x="42" y="204">NextNode[id]==11</label>
+			<label kind="synchronisation" x="43" y="187">chR[id]?</label>
+			<label kind="comments" x="93" y="229">19</label>
+		</transition>
+		<transition>
+			<source ref="id167"/>
+			<target ref="id166"/>
+			<label kind="guard" x="356" y="272">NextNode[id]==15</label>
+			<label kind="synchronisation" x="365" y="289">chR[id]?</label>
+			<label kind="comments" x="448" y="281">34</label>
+		</transition>
+		<transition>
+			<source ref="id171"/>
+			<target ref="id167"/>
+			<label kind="guard" x="229" y="204">NextNode[id]==14</label>
+			<label kind="synchronisation" x="237" y="221">chR[id]?</label>
+			<label kind="comments" x="297" y="221">31</label>
+		</transition>
+		<transition>
+			<source ref="id170"/>
+			<target ref="id168"/>
+			<label kind="guard" x="349" y="-51">NextNode[id]==18</label>
+			<label kind="synchronisation" x="349" y="-34">chR[id]?</label>
+			<label kind="comments" x="441" y="-68">30</label>
+		</transition>
+		<transition>
+			<source ref="id170"/>
+			<target ref="id169"/>
+			<label kind="guard" x="331" y="-127">NextNode[id]==17</label>
+			<label kind="synchronisation" x="331" y="-110">chR[id]?</label>
+			<label kind="comments" x="339" y="-85">28</label>
+		</transition>
+		<transition>
+			<source ref="id171"/>
+			<target ref="id170"/>
+			<label kind="guard" x="365" y="68">NextNode[id]==16</label>
+			<label kind="synchronisation" x="331" y="42">chR[id]?</label>
+			<label kind="comments" x="331" y="71">26</label>
+		</transition>
+		<transition>
+			<source ref="id172"/>
+			<target ref="id171"/>
+			<label kind="guard" x="144" y="85">NextNode[id]==13</label>
+			<label kind="synchronisation" x="153" y="110">chR[id]?</label>
+			<label kind="comments" x="229" y="111">24</label>
+		</transition>
+		<transition>
+			<source ref="id174"/>
+			<target ref="id173"/>
+			<label kind="guard" x="-59" y="0">NextNode[id]==9</label>
+			<label kind="synchronisation" x="-59" y="-17">chR[id]?</label>
+			<label kind="comments" x="-51" y="25">16</label>
+		</transition>
+		<transition>
+			<source ref="id175"/>
+			<target ref="id174"/>
+			<label kind="comments" x="-161" y="110">14</label>
+		</transition>
+		<transition>
+			<source ref="id163"/>
+			<target ref="id162"/>
+			<label kind="guard" x="-459" y="272">NextNode[id]==8</label>
+			<label kind="synchronisation" x="-459" y="255">chR[id]?</label>
+			<label kind="comments" x="-484" y="272">11</label>
+		</transition>
+		<transition>
+			<source ref="id175"/>
+			<target ref="id163"/>
+			<label kind="guard" x="-289" y="221">NextNode[id]==7</label>
+			<label kind="synchronisation" x="-289" y="246">chR[id]?</label>
+			<label kind="comments" x="-229" y="246">9</label>
+		</transition>
+		<transition>
+			<source ref="id178"/>
+			<target ref="id175"/>
+			<label kind="guard" x="-297" y="34">NextNode[id]==5</label>
+			<label kind="synchronisation" x="-297" y="17">chR[id]?</label>
+			<label kind="comments" x="-289" y="68">7</label>
+		</transition>
+		<transition>
+			<source ref="id177"/>
+			<target ref="id176"/>
+			<label kind="guard" x="-484" y="111">NextNode[id]==4</label>
+			<label kind="synchronisation" x="-501" y="38">chR[id]?</label>
+			<label kind="comments" x="-484" y="68">5</label>
+		</transition>
+		<transition>
+			<source ref="id178"/>
+			<target ref="id177"/>
+			<label kind="guard" x="-433" y="-8">NextNode[id]==3</label>
+			<label kind="synchronisation" x="-391" y="-25">chR[id]?</label>
+			<label kind="comments" x="-459" y="-25">3</label>
+		</transition>
+		<transition>
+			<source ref="id179"/>
+			<target ref="id178"/>
+			<label kind="guard" x="-425" y="-144">NextNode[id]==2</label>
+			<label kind="synchronisation" x="-399" y="-170">chR[id]?</label>
+			<label kind="comments" x="-323" y="-170">1</label>
+		</transition>
+	</template>
+	<template>
+		<name x="5" y="5">IntruderPos</name>
+		<declaration>// Place local declarations here.
+const int id=0;</declaration>
+		<location id="id180" x="-510" y="298">
+			<name x="-520" y="264">n8</name>
+		</location>
+		<location id="id181" x="-297" y="298">
+			<name x="-280" y="289">n7</name>
+		</location>
+		<location id="id182" x="-68" y="306">
+			<name x="-78" y="272">n12</name>
+		</location>
+		<location id="id183" x="119" y="306">
+			<name x="127" y="298">n11</name>
+		</location>
+		<location id="id184" x="492" y="306">
+			<name x="482" y="272">n15</name>
+		</location>
+		<location id="id185" x="331" y="306">
+			<name x="288" y="298">n14</name>
+		</location>
+		<location id="id186" x="492" y="-17">
+			<name x="482" y="-51">n18</name>
+		</location>
+		<location id="id187" x="331" y="-170">
+			<name x="321" y="-204">n17</name>
+		</location>
+		<location id="id188" x="331" y="-17">
+			<name x="321" y="-51">n16</name>
+		</location>
+		<location id="id189" x="331" y="136">
+			<name x="348" y="119">n13</name>
+		</location>
+		<location id="id190" x="119" y="136">
+			<name x="109" y="102">n10</name>
+		</location>
+		<location id="id191" x="-68" y="-34">
+			<name x="-78" y="-68">n9</name>
+		</location>
+		<location id="id192" x="-68" y="136">
+			<name x="-102" y="111">n6</name>
+		</location>
+		<location id="id193" x="-297" y="136">
+			<name x="-331" y="119">n5</name>
+		</location>
+		<location id="id194" x="-501" y="136">
+			<name x="-510" y="145">n4</name>
+		</location>
+		<location id="id195" x="-501" y="-34">
+			<name x="-511" y="-68">n3</name>
+		</location>
+		<location id="id196" x="-297" y="-34">
+			<name x="-323" y="-76">n2</name>
+		</location>
+		<location id="id197" x="-297" y="-187">
+			<name x="-307" y="-221">n1</name>
+		</location>
+		<init ref="id191"/>
+		<transition>
+			<source ref="id183"/>
+			<target ref="id190"/>
+			<label kind="guard" x="127" y="255">forall (i : int[1,R]) Pos[i] != 10</label>
+			<label kind="synchronisation" x="144" y="272">chI?</label>
+			<label kind="assignment" x="140" y="263">Pos[id]=10</label>
+			<label kind="comments" x="186" y="238">20</label>
+			<nail x="161" y="221"/>
+		</transition>
+		<transition>
+			<source ref="id187"/>
+			<target ref="id188"/>
+			<label kind="guard" x="195" y="-153">forall (i : int[1,R]) Pos[i] != 16</label>
+			<label kind="synchronisation" x="195" y="-127">chI?</label>
+			<label kind="assignment" x="309" y="-127">Pos[id]=16</label>
+			<label kind="comments" x="254" y="-110">27</label>
+			<nail x="288" y="-85"/>
+		</transition>
+		<transition>
+			<source ref="id186"/>
+			<target ref="id188"/>
+			<label kind="guard" x="424" y="0">forall (i : int[1,R]) Pos[i] != 16</label>
+			<label kind="synchronisation" x="365" y="0">chI?</label>
+			<label kind="assignment" x="424" y="-6">Pos[id]=16</label>
+			<label kind="comments" x="415" y="25">29</label>
+			<nail x="406" y="4"/>
+		</transition>
+		<transition>
+			<source ref="id188"/>
+			<target ref="id189"/>
+			<label kind="guard" x="195" y="0">forall (i : int[1,R]) Pos[i] != 13</label>
+			<label kind="synchronisation" x="212" y="17">chI?</label>
+			<label kind="assignment" x="314" y="25">Pos[id]=13</label>
+			<label kind="comments" x="280" y="34">25</label>
+			<nail x="297" y="68"/>
+		</transition>
+		<transition>
+			<source ref="id191"/>
+			<target ref="id192"/>
+			<label kind="guard" x="-195" y="-8">forall (i : int[1,R]) Pos[i] != 6</label>
+			<label kind="synchronisation" x="-153" y="8">chI?</label>
+			<label kind="assignment" x="-80" y="0">Pos[id]=6</label>
+			<label kind="comments" x="-127" y="-34">15</label>
+			<nail x="-93" y="34"/>
+		</transition>
+		<transition>
+			<source ref="id192"/>
+			<target ref="id193"/>
+			<label kind="guard" x="-272" y="170">forall (i : int[1,R]) Pos[i] != 5</label>
+			<label kind="synchronisation" x="-272" y="153">chI?</label>
+			<label kind="assignment" x="-169" y="148">Pos[id]=5</label>
+			<label kind="comments" x="-153" y="170">13</label>
+			<nail x="-187" y="161"/>
+		</transition>
+		<transition>
+			<source ref="id190"/>
+			<target ref="id192"/>
+			<label kind="guard" x="-68" y="153">forall (i : int[1,R]) Pos[i] != 6</label>
+			<label kind="synchronisation" x="-68" y="170">chI?</label>
+			<label kind="assignment" x="61" y="153">Pos[id]=6</label>
+			<label kind="comments" x="-9" y="178">17</label>
+			<nail x="43" y="170"/>
+		</transition>
+		<transition>
+			<source ref="id189"/>
+			<target ref="id190"/>
+			<label kind="guard" x="153" y="161">forall (i : int[1,R]) Pos[i] != 10</label>
+			<label kind="synchronisation" x="153" y="145">chI?</label>
+			<label kind="assignment" x="264" y="144">Pos[id]=10</label>
+			<label kind="comments" x="280" y="153">23</label>
+			<nail x="246" y="153"/>
+		</transition>
+		<transition>
+			<source ref="id185"/>
+			<target ref="id189"/>
+			<label kind="guard" x="374" y="213">forall (i : int[1,R]) Pos[i] != 13</label>
+			<label kind="synchronisation" x="407" y="179">chI?</label>
+			<label kind="assignment" x="356" y="268">Pos[id]=13</label>
+			<label kind="comments" x="382" y="179">32</label>
+			<nail x="382" y="230"/>
+		</transition>
+		<transition>
+			<source ref="id184"/>
+			<target ref="id185"/>
+			<label kind="guard" x="399" y="331">forall (i : int[1,R]) Pos[i] != 14</label>
+			<label kind="synchronisation" x="297" y="331">chI?</label>
+			<label kind="assignment" x="434" y="318">Pos[id]=14</label>
+			<label kind="comments" x="356" y="331">33</label>
+			<nail x="416" y="331"/>
+		</transition>
+		<transition>
+			<source ref="id181"/>
+			<target ref="id193"/>
+			<label kind="guard" x="-433" y="187">forall (i : int[1,R]) Pos[i] != 5</label>
+			<label kind="synchronisation" x="-408" y="170">chI?</label>
+			<label kind="assignment" x="-314" y="247">Pos[id]=5</label>
+			<label kind="comments" x="-374" y="213">10</label>
+			<nail x="-331" y="196"/>
+		</transition>
+		<transition>
+			<source ref="id180"/>
+			<target ref="id181"/>
+			<label kind="guard" x="-399" y="331">forall (i : int[1,R]) Pos[i] != 7</label>
+			<label kind="synchronisation" x="-510" y="323">chI?</label>
+			<label kind="assignment" x="-492" y="315">Pos[id]=7</label>
+			<label kind="comments" x="-450" y="331">12</label>
+			<nail x="-391" y="332"/>
+		</transition>
+		<transition>
+			<source ref="id193"/>
+			<target ref="id196"/>
+			<label kind="guard" x="-425" y="25">forall (i : int[1,R]) Pos[i] != 2</label>
+			<label kind="synchronisation" x="-391" y="42">chI?</label>
+			<label kind="assignment" x="-374" y="51">Pos[id]=2</label>
+			<label kind="comments" x="-340" y="111">8</label>
+			<nail x="-323" y="59"/>
+		</transition>
+		<transition>
+			<source ref="id196"/>
+			<target ref="id197"/>
+			<label kind="guard" x="-255" y="-85">forall (i : int[1,R]) Pos[i] != 1</label>
+			<label kind="synchronisation" x="-255" y="-110">chI?</label>
+			<label kind="assignment" x="-221" y="-119">Pos[id]=1</label>
+			<label kind="comments" x="-255" y="-136">2</label>
+			<nail x="-272" y="-110"/>
+		</transition>
+		<transition>
+			<source ref="id195"/>
+			<target ref="id196"/>
+			<label kind="guard" x="-484" y="-68">forall (i : int[1,R]) Pos[i] != 2</label>
+			<label kind="synchronisation" x="-494" y="-85">chI?</label>
+			<label kind="assignment" x="-459" y="-85">Pos[id]=2</label>
+			<label kind="comments" x="-365" y="-76">4</label>
+			<nail x="-400" y="-51"/>
+		</transition>
+		<transition>
+			<source ref="id192"/>
+			<target ref="id190"/>
+			<label kind="guard" x="-51" y="111">forall (i : int[1,R]) Pos[i] != 10</label>
+			<label kind="synchronisation" x="-51" y="94">chI?</label>
+			<label kind="assignment" x="-50" y="136">Pos[id]=10</label>
+			<label kind="comments" x="76" y="94">18</label>
+		</transition>
+		<transition>
+			<source ref="id193"/>
+			<target ref="id192"/>
+			<label kind="guard" x="-255" y="94">forall (i : int[1,R]) Pos[i] != 6</label>
+			<label kind="synchronisation" x="-272" y="110">chI?</label>
+			<label kind="assignment" x="-279" y="136">Pos[id]=6</label>
+		</transition>
+		<transition>
+			<source ref="id194"/>
+			<target ref="id195"/>
+			<label kind="guard" x="-637" y="8">forall (i : int[1,R]) Pos[i] != 3</label>
+			<label kind="synchronisation" x="-603" y="25">chI?</label>
+			<label kind="assignment" x="-629" y="34">Pos[id]=3</label>
+			<label kind="comments" x="-561" y="59">6</label>
+			<nail x="-518" y="51"/>
+		</transition>
+		<transition>
+			<source ref="id182"/>
+			<target ref="id183"/>
+			<label kind="guard" x="-34" y="331">forall (i : int[1,R]) Pos[i] != 11</label>
+			<label kind="synchronisation" x="85" y="331">chI?</label>
+			<label kind="assignment" x="-50" y="318">Pos[id]=11</label>
+			<label kind="comments" x="-68" y="331">22</label>
+			<nail x="43" y="331"/>
+		</transition>
+		<transition>
+			<source ref="id183"/>
+			<target ref="id182"/>
+			<label kind="guard" x="-42" y="272">forall (i : int[1,R]) Pos[i] != 12</label>
+			<label kind="synchronisation" x="-17" y="255">chI?</label>
+			<label kind="assignment" x="-50" y="306">Pos[id]=12</label>
+			<label kind="comments" x="-42" y="246">21</label>
+		</transition>
+		<transition>
+			<source ref="id190"/>
+			<target ref="id183"/>
+			<label kind="guard" x="42" y="204">forall (i : int[1,R]) Pos[i] != 11</label>
+			<label kind="synchronisation" x="43" y="187">chI?</label>
+			<label kind="assignment" x="119" y="221">Pos[id]=11</label>
+			<label kind="comments" x="93" y="229">19</label>
+		</transition>
+		<transition>
+			<source ref="id185"/>
+			<target ref="id184"/>
+			<label kind="guard" x="356" y="272">forall (i : int[1,R]) Pos[i] != 15</label>
+			<label kind="synchronisation" x="365" y="289">chI?</label>
+			<label kind="assignment" x="349" y="306">Pos[id]=15</label>
+			<label kind="comments" x="448" y="281">34</label>
+		</transition>
+		<transition>
+			<source ref="id189"/>
+			<target ref="id185"/>
+			<label kind="guard" x="229" y="204">forall (i : int[1,R]) Pos[i] != 14</label>
+			<label kind="synchronisation" x="237" y="221">chI?</label>
+			<label kind="assignment" x="331" y="221">Pos[id]=14</label>
+			<label kind="comments" x="297" y="221">31</label>
+		</transition>
+		<transition>
+			<source ref="id188"/>
+			<target ref="id186"/>
+			<label kind="guard" x="349" y="-51">forall (i : int[1,R]) Pos[i] != 18</label>
+			<label kind="synchronisation" x="349" y="-34">chI?</label>
+			<label kind="assignment" x="349" y="-17">Pos[id]=18</label>
+			<label kind="comments" x="441" y="-68">30</label>
+		</transition>
+		<transition>
+			<source ref="id188"/>
+			<target ref="id187"/>
+			<label kind="guard" x="331" y="-127">forall (i : int[1,R]) Pos[i] != 17</label>
+			<label kind="synchronisation" x="331" y="-110">chI?</label>
+			<label kind="assignment" x="331" y="-93">Pos[id]=17</label>
+			<label kind="comments" x="339" y="-85">28</label>
+		</transition>
+		<transition>
+			<source ref="id189"/>
+			<target ref="id188"/>
+			<label kind="guard" x="365" y="68">forall (i : int[1,R]) Pos[i] != 16</label>
+			<label kind="synchronisation" x="331" y="42">chI?</label>
+			<label kind="assignment" x="331" y="59">Pos[id]=16</label>
+			<label kind="comments" x="331" y="71">26</label>
+		</transition>
+		<transition>
+			<source ref="id190"/>
+			<target ref="id189"/>
+			<label kind="guard" x="144" y="85">forall (i : int[1,R]) Pos[i] != 13</label>
+			<label kind="synchronisation" x="153" y="110">chI?</label>
+			<label kind="assignment" x="137" y="136">Pos[id]=13</label>
+			<label kind="comments" x="229" y="111">24</label>
+		</transition>
+		<transition>
+			<source ref="id192"/>
+			<target ref="id191"/>
+			<label kind="guard" x="-59" y="0">forall (i : int[1,R]) Pos[i] != 9</label>
+			<label kind="synchronisation" x="-59" y="-17">chI?</label>
+			<label kind="assignment" x="-68" y="51">Pos[id]=9</label>
+			<label kind="comments" x="-51" y="25">16</label>
+		</transition>
+		<transition>
+			<source ref="id193"/>
+			<target ref="id192"/>
+			<label kind="comments" x="-161" y="110">14</label>
+		</transition>
+		<transition>
+			<source ref="id181"/>
+			<target ref="id180"/>
+			<label kind="guard" x="-459" y="272">forall (i : int[1,R]) Pos[i] != 8</label>
+			<label kind="synchronisation" x="-459" y="255">chI?</label>
+			<label kind="assignment" x="-492" y="298">Pos[id]=8</label>
+			<label kind="comments" x="-484" y="272">11</label>
+		</transition>
+		<transition>
+			<source ref="id193"/>
+			<target ref="id181"/>
+			<label kind="guard" x="-289" y="221">forall (i : int[1,R]) Pos[i] != 7</label>
+			<label kind="synchronisation" x="-289" y="246">chI?</label>
+			<label kind="assignment" x="-297" y="217">Pos[id]=7</label>
+			<label kind="comments" x="-229" y="246">9</label>
+		</transition>
+		<transition>
+			<source ref="id196"/>
+			<target ref="id193"/>
+			<label kind="guard" x="-297" y="34">forall (i : int[1,R]) Pos[i] != 5</label>
+			<label kind="synchronisation" x="-297" y="17">chI?</label>
+			<label kind="assignment" x="-297" y="51">Pos[id]=5</label>
+			<label kind="comments" x="-289" y="68">7</label>
+		</transition>
+		<transition>
+			<source ref="id195"/>
+			<target ref="id194"/>
+			<label kind="guard" x="-510" y="34">forall (i : int[1,R]) Pos[i] != 4</label>
+			<label kind="synchronisation" x="-501" y="21">chI?</label>
+			<label kind="assignment" x="-493" y="68">Pos[id]=4</label>
+			<label kind="comments" x="-484" y="51">5</label>
+		</transition>
+		<transition>
+			<source ref="id196"/>
+			<target ref="id195"/>
+			<label kind="guard" x="-433" y="-8">forall (i : int[1,R]) Pos[i] != 3</label>
+			<label kind="synchronisation" x="-391" y="-25">chI?</label>
+			<label kind="assignment" x="-459" y="-17">Pos[id]=3</label>
+			<label kind="comments" x="-459" y="-25">3</label>
+		</transition>
+		<transition>
+			<source ref="id197"/>
+			<target ref="id196"/>
+			<label kind="guard" x="-425" y="-144">forall (i : int[1,R]) Pos[i] != 2</label>
+			<label kind="synchronisation" x="-399" y="-170">chI?</label>
+			<label kind="assignment" x="-374" y="-119">Pos[id]=2</label>
+			<label kind="comments" x="-323" y="-170">1</label>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+//Process = Template();
+//Robot1= Robot(1);
+//Robot2= Robot(2);
+//Robot3= Robot(3); 
+//Robot4= Robot(4);
+// List one or more processes to be composed into a system.
+system  NRobot1_Pos, NRobot2_Pos, NRobot3_Pos, NRobot4_Pos, IntruderPos, Planner1,Planner2,Planner3,Planner4,Caller1,Caller2,Caller3,Caller4,Responder1, Responder2, Responder3,Responder4;
+
+    </system>
+	<queries>
+		<query>
+			<formula>A&lt;&gt; Captured
+			</formula>
+			<comment>
+			</comment>
+		</query>
+	</queries>
+</nta>
